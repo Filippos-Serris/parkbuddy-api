@@ -1,0 +1,12 @@
+{
+  "Version": 1,
+  "Hash": "mm1I27ccGAmV1Z2XygoKaQvGMsjFWuKeT04PR3f9Vgw=",
+  "Source": "ParkBuddy.Api",
+  "BasePath": "_content/ParkBuddy.Api",
+  "Mode": "Default",
+  "ManifestType": "Build",
+  "ReferencedProjectsConfiguration": [],
+  "DiscoveryPatterns": [],
+  "Assets": [],
+  "Endpoints": []
+}
