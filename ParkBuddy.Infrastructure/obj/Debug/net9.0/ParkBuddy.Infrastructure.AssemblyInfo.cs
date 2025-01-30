@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("ParkBuddy.Infrastructure")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+d7e52f1438090308abeeec8e597e23a934fb54b8")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+3840f1f167d1a031210422fd9f90f3b7d48f192c")]
 [assembly: System.Reflection.AssemblyProductAttribute("ParkBuddy.Infrastructure")]
 [assembly: System.Reflection.AssemblyTitleAttribute("ParkBuddy.Infrastructure")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

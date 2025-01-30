@@ -1,21 +1,23 @@
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Infrastructure;
 using ParkBuddy.Application.Dtos;
 using ParkBuddy.Application.Interfaces;
+using ParkBuddy.Domain.Entities;
 
 namespace ParkBuddy.Api.Controllers
 {
     [ApiController]
-    [Route("[controller]/")]
-    public class ParkingController : ControllerBase
+    [Route("api/[controller]/")]
+    public class ParkingsController : ControllerBase
     {
         private readonly IParkingRepository parkingRepository;
-        public ParkingController(IParkingRepository parkingRepository)
+        public ParkingsController(IParkingRepository parkingRepository)
         {
             this.parkingRepository = parkingRepository;
         }
 
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<ParkingDto>>> GetParkings()
+        public async Task<IActionResult> GetParkings()
         {
             var result = await parkingRepository.GetParkingsAsync();
 
@@ -34,6 +36,17 @@ namespace ParkBuddy.Api.Controllers
                 return NotFound();
 
             return Ok(result);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> RegisterParking(RegisterParkingDto parking)
+        {
+            var result = await parkingRepository.RegisterParkingAsync(parking);
+
+            if (result == null)
+                return BadRequest();
+
+            return Ok();
         }
     }
 }

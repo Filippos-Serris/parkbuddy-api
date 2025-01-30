@@ -2,6 +2,7 @@ using Microsoft.EntityFrameworkCore;
 using ParkBuddy.Application.Dtos;
 using ParkBuddy.Application.Interfaces;
 using ParkBuddy.Application.Mappings;
+using ParkBuddy.Domain.Entities;
 using ParkBuddy.Infrastructure.Data;
 
 namespace ParkBuddy.Infrastructure.Repositories
@@ -16,18 +17,25 @@ namespace ParkBuddy.Infrastructure.Repositories
             this.parkBuddyContext = parkBuddyContext;
             this.parkingMapper = parkingMapper;
         }
-        public async Task<List<ParkingDto>> GetParkingsAsync() // to be parking Dto
+        public async Task<List<Parking>> GetParkingsAsync() // to be parking Dto
         {
             var parkings = await parkBuddyContext.Parkings.ToListAsync();
-            var parkingDtos = parkingMapper.MapToListDto(parkings);
-
-            return parkingDtos;
+            return parkings;
         }
-        public async Task<ParkingDto> GetParkingAsync(Guid parkingId)
+        public async Task<Parking> GetParkingAsync(Guid parkingId)
         {
             var parking = await parkBuddyContext.Parkings.Where(parking => parking.ParkingId == parkingId).FirstOrDefaultAsync();
-            var parkingDto = parkingMapper.MapToDto(parking);
-            return parkingDto;
+            return parking;
+        }
+
+        public async Task<Parking> RegisterParkingAsync(RegisterParkingDto registerParkingDto)
+        {
+            var parking = parkingMapper.RegisterDtoToParking(registerParkingDto);
+
+            await parkBuddyContext.Parkings.AddAsync(parking);
+            await parkBuddyContext.SaveChangesAsync();
+
+            return parking;
         }
     }
 }

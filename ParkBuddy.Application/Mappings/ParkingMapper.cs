@@ -5,7 +5,7 @@ namespace ParkBuddy.Application.Mappings
 {
     public class ParkingMapper : IParkingMapper
     {
-        public ParkingDto MapToDto(Parking parking)
+        /*public ParkingDto MapToDto(Parking parking)
         {
             var parkingDto = new ParkingDto
             {
@@ -30,6 +30,21 @@ namespace ParkBuddy.Application.Mappings
             }).ToList();
 
             return parkingDtos;
+        }*/
+
+        public Parking RegisterDtoToParking(RegisterParkingDto parking)
+        {
+            var parkingDto = new Parking
+            {
+                ParkingId = Guid.NewGuid(),
+                Name = parking.Name,
+                Address = parking.Address,
+                Capacity = parking.Capacity,
+                PricePerHour = parking.PricePerHour,
+                Status = Domain.Enums.ParkingStatus.Open
+            };
+
+            return parkingDto;
         }
     }
 }
