@@ -9,3 +9,4 @@ C:\Users\filip\source\repos\ParkBuddy\ParkBuddy.Domain\obj\Debug\net9.0\ParkBudd
 C:\Users\filip\source\repos\ParkBuddy\ParkBuddy.Domain\obj\Debug\net9.0\refint\ParkBuddy.Domain.dll
 C:\Users\filip\source\repos\ParkBuddy\ParkBuddy.Domain\obj\Debug\net9.0\ParkBuddy.Domain.pdb
 C:\Users\filip\source\repos\ParkBuddy\ParkBuddy.Domain\obj\Debug\net9.0\ref\ParkBuddy.Domain.dll
+C:\Users\filip\source\repos\ParkBuddy\ParkBuddy.Domain\obj\Debug\net9.0\ParkBuddy.Domain.sourcelink.json

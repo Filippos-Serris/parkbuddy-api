@@ -17,3 +17,4 @@ C:\Users\filip\source\repos\ParkBuddy\ParkBuddy.Infrastructure\bin\Debug\net9.0\
 C:\Users\filip\source\repos\ParkBuddy\ParkBuddy.Infrastructure\obj\Debug\net9.0\ParkBuddy.Infrastructure.csproj.AssemblyReference.cache
 C:\Users\filip\source\repos\ParkBuddy\ParkBuddy.Infrastructure\obj\Debug\net9.0\ParkBudd.E76F8FB7.Up2Date
 C:\Users\filip\source\repos\ParkBuddy\ParkBuddy.Infrastructure\obj\Debug\net9.0\ParkBuddy.Infrastructure.genruntimeconfig.cache
+C:\Users\filip\source\repos\ParkBuddy\ParkBuddy.Infrastructure\obj\Debug\net9.0\ParkBuddy.Infrastructure.sourcelink.json

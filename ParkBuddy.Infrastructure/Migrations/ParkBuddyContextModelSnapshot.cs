@@ -42,6 +42,9 @@ namespace ParkBuddy.Infrastructure.Migrations
                     b.Property<decimal>("PricePerHour")
                         .HasColumnType("numeric");
 
+                    b.Property<int>("Status")
+                        .HasColumnType("integer");
+
                     b.HasKey("ParkingId");
 
                     b.ToTable("Parkings");
@@ -53,7 +56,8 @@ namespace ParkBuddy.Infrastructure.Migrations
                             Address = "123 Main St, City Center",
                             Capacity = 100,
                             Name = "Downtown Parking",
-                            PricePerHour = 5.00m
+                            PricePerHour = 5.00m,
+                            Status = 0
                         },
                         new
                         {
@@ -61,7 +65,8 @@ namespace ParkBuddy.Infrastructure.Migrations
                             Address = "456 Shopping Ave, Mall Area",
                             Capacity = 150,
                             Name = "Mall Parking",
-                            PricePerHour = 3.50m
+                            PricePerHour = 3.50m,
+                            Status = 0
                         },
                         new
                         {
@@ -69,7 +74,8 @@ namespace ParkBuddy.Infrastructure.Migrations
                             Address = "789 Airport Rd, Near Terminal",
                             Capacity = 200,
                             Name = "Airport Parking",
-                            PricePerHour = 7.00m
+                            PricePerHour = 7.00m,
+                            Status = 0
                         });
                 });
 #pragma warning restore 612, 618

@@ -13,3 +13,4 @@ C:\Users\filip\source\repos\ParkBuddy\ParkBuddy.Application\bin\Debug\net9.0\Par
 C:\Users\filip\source\repos\ParkBuddy\ParkBuddy.Application\bin\Debug\net9.0\ParkBuddy.Domain.pdb
 C:\Users\filip\source\repos\ParkBuddy\ParkBuddy.Application\obj\Debug\net9.0\ParkBuddy.Application.csproj.AssemblyReference.cache
 C:\Users\filip\source\repos\ParkBuddy\ParkBuddy.Application\obj\Debug\net9.0\ParkBudd.0262F4AE.Up2Date
+C:\Users\filip\source\repos\ParkBuddy\ParkBuddy.Application\obj\Debug\net9.0\ParkBuddy.Application.sourcelink.json
