@@ -1,0 +1,50 @@
+## Ignore Windows Installer files
+*.cab
+*.msi
+*.msm
+*.msp
+
+## Ignore Windows Installer Log files
+*.log
+
+## Ignore .NET build results
+[Dd]ebug/
+[Dd]ebugPublic/
+[Dd]ist/
+[Dd]ist-Debug/
+[Dd]ist-Release/
+bin/
+obj/
+out/
+
+## Ignore user-specific files
+.vs/
+.idea/
+.vscode/
+
+## User-specific files
+*.user
+*.userosscache
+*.suo
+*.userprefs
+
+## Ignore the "packages" folder (NuGet)
+packages/
+
+## Ignore files created by Visual Studio for Mac
+.vscode/
+
+## Ignore ASP.NET Scaffolding
+Scaffolding/
+
+## Ignore npm-debug.log
+npm-debug.log
+
+## Ignore JetBrains Rider project settings
+.idea/
+
+## Ignore the build output folder for Visual Studio Code
+.vscode/
+
+## Ignore the .NET Core SDK folder
+.vsconfig/
