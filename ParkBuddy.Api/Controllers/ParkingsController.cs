@@ -1,8 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Infrastructure;
 using ParkBuddy.Application.Dtos;
 using ParkBuddy.Application.Interfaces;
-using ParkBuddy.Domain.Entities;
 
 namespace ParkBuddy.Api.Controllers
 {
@@ -47,6 +45,17 @@ namespace ParkBuddy.Api.Controllers
                 return BadRequest();
 
             return Ok();
+        }
+
+        [HttpDelete]
+        public async Task<IActionResult> DeleteParkingAsync(Guid parkingId)
+        {
+            var result = await parkingRepository.DeleteParkingAsync(parkingId);
+
+            if (result)
+                return Ok();
+            else
+                return NotFound();
         }
     }
 }

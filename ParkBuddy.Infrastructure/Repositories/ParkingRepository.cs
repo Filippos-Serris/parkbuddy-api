@@ -37,5 +37,20 @@ namespace ParkBuddy.Infrastructure.Repositories
 
             return parking;
         }
+
+        public async Task<bool> DeleteParkingAsync(Guid parkingId)
+        {
+            var parking = await parkBuddyContext.Parkings.FindAsync(parkingId);
+
+            if (parking == null)
+                return false;
+
+            parkBuddyContext.Remove(parking);
+
+            var result = await parkBuddyContext.SaveChangesAsync();
+            if (result >= 1)
+                return true;
+            return false;
+        }
     }
 }
