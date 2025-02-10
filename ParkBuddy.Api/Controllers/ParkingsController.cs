@@ -1,7 +1,9 @@
 using Microsoft.AspNetCore.Mvc;
+using ParkBuddy.Application;
 using ParkBuddy.Application.Dtos;
 using ParkBuddy.Application.Interfaces;
 using ParkBuddy.Application.Validation;
+using ParkBuddy.Domain.Entities;
 
 namespace ParkBuddy.Api.Controllers
 {
@@ -20,10 +22,10 @@ namespace ParkBuddy.Api.Controllers
         {
             var result = await parkingRepository.GetParkingsAsync();
 
-            if (result == null)
-                NotFound();
+            if (result == null || !result.Any())
+                return Ok(new ApiResponse<object>(true, "No parkings available", new List<Parking>()));
 
-            return Ok(result);
+            return Ok(new ApiResponse<List<Parking>>(true, "Parkings retrieved successfully", result));
         }
 
         [HttpGet("{parkingId}")]
@@ -32,9 +34,9 @@ namespace ParkBuddy.Api.Controllers
             var result = await parkingRepository.GetParkingAsync(parkingId);
 
             if (result == null)
-                return NotFound();
+                return NotFound(new ApiResponse<object>(false, "Parking not found"));
 
-            return Ok(result);
+            return Ok(new ApiResponse<Parking>(true, "Parking retrieved successfully", result));
         }
 
         [HttpPost]
@@ -44,14 +46,17 @@ namespace ParkBuddy.Api.Controllers
             var validationResult = await validator.ValidateAsync(parking);
 
             if (!validationResult.IsValid)
-                return BadRequest(validationResult.Errors);
+            {
+                var errors = validationResult.Errors.Select(e => e.ErrorMessage).ToList();
+                return BadRequest(new ApiResponse<object>(false, "Validation failed", errors));
+            }
 
             var result = await parkingRepository.RegisterParkingAsync(parking);
 
             if (result == null)
-                return StatusCode(500, "Failed to register parking");
+                return StatusCode(500, new ApiResponse<object>(false, "Failed to register parking"));
 
-            return Ok();
+            return Ok(new ApiResponse<Parking>(true, "Parking register successfully", result));
         }
 
         [HttpDelete]
@@ -59,10 +64,10 @@ namespace ParkBuddy.Api.Controllers
         {
             var result = await parkingRepository.DeleteParkingAsync(parkingId);
 
-            if (result)
-                return Ok();
-            else
-                return NotFound();
+            if (!result)
+                return NotFound(new ApiResponse<object>(false, "Parking not found"));
+
+            return Ok(new ApiResponse<object>(true, "Parking deleted successfully"));
         }
     }
 }

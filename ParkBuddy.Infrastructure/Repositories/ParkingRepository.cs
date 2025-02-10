@@ -17,7 +17,7 @@ namespace ParkBuddy.Infrastructure.Repositories
             this.parkBuddyContext = parkBuddyContext;
             this.parkingMapper = parkingMapper;
         }
-        public async Task<List<Parking>> GetParkingsAsync() // to be parking Dto
+        public async Task<List<Parking>> GetParkingsAsync()
         {
             var parkings = await parkBuddyContext.Parkings.ToListAsync();
             return parkings;
