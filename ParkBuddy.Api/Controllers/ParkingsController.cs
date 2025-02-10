@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
 using ParkBuddy.Application.Dtos;
 using ParkBuddy.Application.Interfaces;
+using ParkBuddy.Application.Validation;
 
 namespace ParkBuddy.Api.Controllers
 {
@@ -39,10 +40,16 @@ namespace ParkBuddy.Api.Controllers
         [HttpPost]
         public async Task<IActionResult> RegisterParking(RegisterParkingDto parking)
         {
+            var validator = new RegisterParkingDtoValidator();
+            var validationResult = await validator.ValidateAsync(parking);
+
+            if (!validationResult.IsValid)
+                return BadRequest(validationResult.Errors);
+
             var result = await parkingRepository.RegisterParkingAsync(parking);
 
             if (result == null)
-                return BadRequest();
+                return StatusCode(500, "Failed to register parking");
 
             return Ok();
         }
