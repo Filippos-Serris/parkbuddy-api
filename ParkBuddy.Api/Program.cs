@@ -4,6 +4,7 @@ using ParkBuddy.Application.Handlers.QueryHandlers;
 using ParkBuddy.Application.Mappings;
 using ParkBuddy.Application.Validation;
 using ParkBuddy.Infrastructure.Data;
+using System.Text.Json.Serialization;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -13,7 +14,12 @@ builder.Services.AddMediatR(cnf => cnf.RegisterServicesFromAssembly(typeof(Parki
 
 builder.Services.AddOpenApi();
 
-builder.Services.AddControllers();
+builder.Services
+    .AddControllers()
+    .AddJsonOptions(opt =>
+    {
+        opt.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
+    });
 
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();

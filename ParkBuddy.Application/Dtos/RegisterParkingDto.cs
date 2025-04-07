@@ -8,6 +8,6 @@ namespace ParkBuddy.Application.Dtos
         public string Address { get; set; }
         public int Capacity { get; set; }
         public decimal PricePerHour { get; set; }
-        public ParkingStatus Status { get; set; }
+        public ParkingStatus Status { get; set; } = ParkingStatus.Open;
     }
 }
