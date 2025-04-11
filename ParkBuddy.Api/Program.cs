@@ -10,7 +10,7 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddScoped<IParkingMapper, ParkingMapper>();
 builder.Services.AddValidatorsFromAssemblyContaining<RegisterParkingDtoValidator>();
-builder.Services.AddMediatR(cnf => cnf.RegisterServicesFromAssembly(typeof(ParkingListHandler).Assembly));
+builder.Services.AddMediatR(cnf => cnf.RegisterServicesFromAssembly(typeof(GetParkingListHandler).Assembly));
 
 builder.Services.AddOpenApi();
 

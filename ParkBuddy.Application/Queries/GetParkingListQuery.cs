@@ -3,7 +3,7 @@ using ParkBuddy.Domain.Entities;
 
 namespace ParkBuddy.Application.Queries
 {
-    public class ParkingListQuery : IRequest<List<Parking>>
+    public class GetParkingListQuery : IRequest<List<Parking>>
     {
 
     }

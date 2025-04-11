@@ -22,12 +22,20 @@ namespace ParkBuddy.Api.Controllers
         [HttpGet]
         public async Task<IActionResult> GetParkings()
         {
-            var result = await mediator.Send(new ParkingListQuery());
+            var result = await mediator.Send(new GetParkingListQuery());
 
             if (result == null || !result.Any())
                 return Ok(new ApiResponse<object>(true, "No parkings available", new List<Parking>()));
 
             return Ok(new ApiResponse<List<Parking>>(true, "Parkings retrieved successfully", result));
+        }
+
+        [HttpGet]
+        [Route("parking")]
+        public async Task<IActionResult> GetParking(Guid parkingId)
+        {
+            var result = await mediator.Send(new GetParkingQuery(parkingId));
+            return Ok(result);
         }
 
         [HttpPost]
@@ -38,46 +46,15 @@ namespace ParkBuddy.Api.Controllers
             return Ok(new ApiResponse<object>(true, "Parking registeed successfully"));
         }
 
-        /* [HttpGet("{parkingId}")]
-        public async Task<IActionResult> GetParking(Guid parkingId)
-        {
-            var result = //TODO
+        //[HttpDelete]
+        //public async Task<IActionResult> DeleteParkingAsync(Guid parkingId)
+        //{
+        //    var result = //TODO
 
-            if (result == null)
-                return NotFound(new ApiResponse<object>(false, "Parking not found"));
+        //    if (!result)
+        //        return NotFound(new ApiResponse<object>(false, "Parking not found"));
 
-            return Ok(new ApiResponse<Parking>(true, "Parking retrieved successfully", result));
-        }
-
-        [HttpPost]
-        public async Task<IActionResult> RegisterParking(RegisterParkingDto parking)
-        {
-            var validator = new RegisterParkingDtoValidator();
-            var validationResult = await validator.ValidateAsync(parking);
-
-            if (!validationResult.IsValid)
-            {
-                var errors = validationResult.Errors.Select(e => e.ErrorMessage).ToList();
-                return BadRequest(new ApiResponse<object>(false, "Validation failed", errors));
-            }
-
-            var result = //TODO
-
-            if (result == null)
-                return StatusCode(500, new ApiResponse<object>(false, "Failed to register parking"));
-
-            return Ok(new ApiResponse<Parking>(true, "Parking register successfully", result));
-        }
-
-        [HttpDelete]
-        public async Task<IActionResult> DeleteParkingAsync(Guid parkingId)
-        {
-            var result = //TODO
-
-            if (!result)
-                return NotFound(new ApiResponse<object>(false, "Parking not found"));
-
-            return Ok(new ApiResponse<object>(true, "Parking deleted successfully"));
-        }*/
+        //    return Ok(new ApiResponse<object>(true, "Parking deleted successfully"));
+        //}
     }
 }

@@ -6,16 +6,16 @@ using ParkBuddy.Infrastructure.Data;
 
 namespace ParkBuddy.Application.Handlers.QueryHandlers
 {
-    public class ParkingListHandler : IRequestHandler<ParkingListQuery, List<Parking>>
+    public class GetParkingListHandler : IRequestHandler<GetParkingListQuery, List<Parking>>
     {
         private readonly ParkBuddyContext context;
 
-        public ParkingListHandler(ParkBuddyContext context)
+        public GetParkingListHandler(ParkBuddyContext context)
         {
             this.context = context;
         }
 
-        public async Task<List<Parking>> Handle(ParkingListQuery request, CancellationToken cancellationToken)
+        public async Task<List<Parking>> Handle(GetParkingListQuery request, CancellationToken cancellationToken)
         {
             var parkings = await context.Parkings.ToListAsync();
             return parkings;
