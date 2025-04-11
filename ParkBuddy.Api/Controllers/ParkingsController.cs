@@ -46,15 +46,11 @@ namespace ParkBuddy.Api.Controllers
             return Ok(new ApiResponse<object>(true, "Parking registeed successfully"));
         }
 
-        //[HttpDelete]
-        //public async Task<IActionResult> DeleteParkingAsync(Guid parkingId)
-        //{
-        //    var result = //TODO
-
-        //    if (!result)
-        //        return NotFound(new ApiResponse<object>(false, "Parking not found"));
-
-        //    return Ok(new ApiResponse<object>(true, "Parking deleted successfully"));
-        //}
+        [HttpDelete]
+        public async Task<IActionResult> DeleteParkingAsync(Guid parkingId)
+        {
+            var result = await mediator.Send(new DeleteParkingCommand(parkingId));
+            return Ok(new ApiResponse<object>(true, "Parking deleted successfully"));
+        }
     }
 }
