@@ -1,28 +1,26 @@
 ﻿using MediatR;
-using Microsoft.EntityFrameworkCore;
 using ParkBuddy.Application.Commands;
-using ParkBuddy.Infrastructure.Data;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using ParkBuddy.Application.Common;
+using ParkBuddy.Domain.Repositories;
 
 namespace ParkBuddy.Application.Handlers.CommandHandlers
 {
-    public class DeleteParkingHandler : IRequestHandler<DeleteParkingCommand, Unit>
+    public class DeleteParkingHandler : IRequestHandler<DeleteParkingCommand, Result<string>>
     {
-        private readonly ParkBuddyContext context;
+        private readonly IParkingRepository parking;
 
-        public DeleteParkingHandler(ParkBuddyContext context)
+        public DeleteParkingHandler(IParkingRepository parking)
         {
-            this.context = context;
+            this.parking = parking;
         }
 
-        public async Task<Unit> Handle(DeleteParkingCommand request, CancellationToken cancellationToken)
+        public async Task<Result<string>> Handle(DeleteParkingCommand request, CancellationToken cancellationToken)
         {
-            var result = await context.Parkings.Where(p => p.ParkingId == request.ParkingId).ExecuteDeleteAsync();
-            return Unit.Value;
+            var result = await parking.DeleteParkingAsync(request.ParkingId);
+
+            if (!result.IsSuccess)
+                return Result<string>.Failure(result.Message);
+            return Result<string>.Success(result.Data, result.Message);
         }
     }
 }

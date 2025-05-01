@@ -27,7 +27,7 @@ namespace ParkBuddy.Api.Controllers
             if (result == null || !result.Any())
                 return Ok(new ApiResponse<object>(true, "No parkings available", new List<Parking>()));
 
-            return Ok(new ApiResponse<List<Parking>>(true, "Parkings retrieved successfully", result));
+            return Ok(new ApiResponse<List<ParkingDto>>(true, "Parkings retrieved successfully", result));
         }
 
         [HttpGet]
@@ -50,7 +50,10 @@ namespace ParkBuddy.Api.Controllers
         public async Task<IActionResult> DeleteParkingAsync(Guid parkingId)
         {
             var result = await mediator.Send(new DeleteParkingCommand(parkingId));
-            return Ok(new ApiResponse<object>(true, "Parking deleted successfully"));
+
+            if (!result.IsSuccess)
+                return NotFound(result.Message);
+            return Ok(result.Data);
         }
     }
 }

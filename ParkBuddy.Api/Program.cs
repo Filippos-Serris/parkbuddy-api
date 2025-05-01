@@ -1,16 +1,18 @@
 using FluentValidation;
 using Microsoft.EntityFrameworkCore;
 using ParkBuddy.Application.Handlers.QueryHandlers;
-using ParkBuddy.Application.Mappings;
 using ParkBuddy.Application.Validation;
+using ParkBuddy.Domain.Repositories;
 using ParkBuddy.Infrastructure.Data;
+using ParkBuddy.Infrastructure.Repositories;
 using System.Text.Json.Serialization;
 
 var builder = WebApplication.CreateBuilder(args);
 
-builder.Services.AddScoped<IParkingMapper, ParkingMapper>();
 builder.Services.AddValidatorsFromAssemblyContaining<RegisterParkingDtoValidator>();
 builder.Services.AddMediatR(cnf => cnf.RegisterServicesFromAssembly(typeof(GetParkingListHandler).Assembly));
+
+builder.Services.AddScoped<IParkingRepository, ParkingRepository>();
 
 builder.Services.AddOpenApi();
 
