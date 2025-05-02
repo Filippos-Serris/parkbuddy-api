@@ -29,7 +29,7 @@ namespace ParkBuddy.Application.Handlers.CommandHandlers
             var result = await context.SaveChangesAsync() > 0;
 
             if (!result)
-                throw new Exception("Failed to register parking");
+                throw new Exception("Failed to register parkingRepository");
             return Unit.Value;
         }
     }

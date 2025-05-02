@@ -4,7 +4,6 @@ using ParkBuddy.Application;
 using ParkBuddy.Application.Commands;
 using ParkBuddy.Application.Dtos;
 using ParkBuddy.Application.Queries;
-using ParkBuddy.Domain.Entities;
 
 namespace ParkBuddy.Api.Controllers
 {
@@ -34,6 +33,9 @@ namespace ParkBuddy.Api.Controllers
         public async Task<IActionResult> GetParking(Guid parkingId)
         {
             var result = await mediator.Send(new GetParkingQuery(parkingId));
+
+            if (!result.IsSuccess)
+                return NotFound();
             return Ok(result);
         }
 

@@ -15,19 +15,6 @@ namespace ParkBuddy.Infrastructure.Repositories
             this.context = context;
         }
 
-        public async Task<Result<string>> DeleteParkingAsync(Guid parkingId)
-        {
-            var result = await context.Parkings.Where(p => p.ParkingId == parkingId).ExecuteDeleteAsync() > 0;
-            return result
-                ? Result<string>.Success("Deleted", "Parking deleted successfully")
-                : Result<string>.Failure("Failed to delete parking");
-        }
-
-        public Task<Result<Parking>> GetParkingAsync()
-        {
-            throw new NotImplementedException();
-        }
-
         public async Task<Result<List<Parking>>> GetParkingListAsync()
         {
             var result = await context.Parkings.ToListAsync();
@@ -35,6 +22,23 @@ namespace ParkBuddy.Infrastructure.Repositories
             if (result == null)
                 return Result<List<Parking>>.Failure("Parkings not retrieved.");
             return Result<List<Parking>>.Success(result, "Parkings retrieved succeffully");
+        }
+
+        public async Task<Result<Parking>> GetParkingAsync(Guid ParkingId)
+        {
+            var result = await context.Parkings.FindAsync(ParkingId);
+
+            if (result == null)
+                return Result<Parking>.Failure("Parking not retrieved.");
+            return Result<Parking>.Success(result, "Parking retrieved succeffully");
+        }
+
+        public async Task<Result<string>> DeleteParkingAsync(Guid parkingId)
+        {
+            var result = await context.Parkings.Where(p => p.ParkingId == parkingId).ExecuteDeleteAsync() > 0;
+            return result
+                ? Result<string>.Success("Deleted", "Parking deleted successfully")
+                : Result<string>.Failure("Failed to delete parking");
         }
 
         public Task<Result<bool>> RegisterParkingAsync(Parking parking)

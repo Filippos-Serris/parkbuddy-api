@@ -1,33 +1,38 @@
 ﻿using MediatR;
+using ParkBuddy.Application.Common;
 using ParkBuddy.Application.Dtos;
 using ParkBuddy.Application.Queries;
-using ParkBuddy.Infrastructure.Data;
+using ParkBuddy.Domain.Repositories;
 
 namespace ParkBuddy.Application.Handlers.QueryHandlers
 {
-    public class GetParkingHandler : IRequestHandler<GetParkingQuery, ParkingDto>
+    public class GetParkingHandler : IRequestHandler<GetParkingQuery, Result<ParkingDto>>
     {
-        private ParkBuddyContext context;
+        private readonly IParkingRepository parkingRepository;
 
-        public GetParkingHandler(ParkBuddyContext context)
+        public GetParkingHandler(IParkingRepository parking)
         {
-            this.context = context;
+            this.parkingRepository = parking;
         }
 
-        public async Task<ParkingDto> Handle(GetParkingQuery request, CancellationToken cancellationToken)
+        public async Task<Result<ParkingDto>> Handle(GetParkingQuery request, CancellationToken cancellationToken)
         {
-            var result = await context.Parkings.FindAsync(request.ParkingId);
-            var parking = new ParkingDto
-            {
-                ParkingId = result.ParkingId,
-                Name=result.Name,
-                Address=result.Address,
-                Capacity=result.Capacity,
-                PricePerHour=result.PricePerHour,
-                Status=result.Status.ToString(),
-            };
+            var result = await parkingRepository.GetParkingAsync(request.ParkingId);
 
-            return parking;
+            if (result.IsSuccess)
+            {
+                var parking = new ParkingDto
+                {
+                    ParkingId = result.Data.ParkingId,
+                    Name = result.Data.Name,
+                    Address = result.Data.Address,
+                    Capacity = result.Data.Capacity,
+                    PricePerHour = result.Data.PricePerHour,
+                    Status = result.Data.Status.ToString(),
+                };
+                return Result<ParkingDto>.Success(parking, result.Message);
+            }
+            return Result<ParkingDto>.Failure(result.Message);
         }
     }
 }
