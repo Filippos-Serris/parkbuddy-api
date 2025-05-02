@@ -1,9 +1,10 @@
 using MediatR;
-using ParkBuddy.Domain.Entities;
+using ParkBuddy.Application.Common;
+using ParkBuddy.Application.Dtos;
 
 namespace ParkBuddy.Application.Queries
 {
-    public class GetParkingListQuery : IRequest<List<Parking>>
+    public class GetParkingListQuery : IRequest<Result<List<ParkingDto>>>
     {
 
     }

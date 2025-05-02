@@ -24,10 +24,9 @@ namespace ParkBuddy.Api.Controllers
         {
             var result = await mediator.Send(new GetParkingListQuery());
 
-            if (result == null || !result.Any())
-                return Ok(new ApiResponse<object>(true, "No parkings available", new List<Parking>()));
-
-            return Ok(new ApiResponse<List<ParkingDto>>(true, "Parkings retrieved successfully", result));
+            if(!result.IsSuccess)
+                return NotFound();
+            return Ok(result);
         }
 
         [HttpGet]

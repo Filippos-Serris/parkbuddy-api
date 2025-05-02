@@ -1,24 +1,42 @@
 using MediatR;
 using Microsoft.EntityFrameworkCore;
+using ParkBuddy.Application.Common;
+using ParkBuddy.Application.Dtos;
 using ParkBuddy.Application.Queries;
 using ParkBuddy.Domain.Entities;
+using ParkBuddy.Domain.Repositories;
 using ParkBuddy.Infrastructure.Data;
 
 namespace ParkBuddy.Application.Handlers.QueryHandlers
 {
-    public class GetParkingListHandler : IRequestHandler<GetParkingListQuery, List<Parking>>
+    public class GetParkingListHandler : IRequestHandler<GetParkingListQuery, Result<List<ParkingDto>>>
     {
-        private readonly ParkBuddyContext context;
+        private readonly IParkingRepository parking;
 
-        public GetParkingListHandler(ParkBuddyContext context)
+        public GetParkingListHandler(IParkingRepository parking)
         {
-            this.context = context;
+            this.parking = parking;
         }
 
-        public async Task<List<Parking>> Handle(GetParkingListQuery request, CancellationToken cancellationToken)
+        public async Task<Result<List<ParkingDto>>> Handle(GetParkingListQuery request, CancellationToken cancellationToken)
         {
-            var parkings = await context.Parkings.ToListAsync();
-            return parkings;
+            var result = await parking.GetParkingListAsync();
+            var parkings = new List<ParkingDto>();
+
+            foreach (var parking in result.Data)
+            {
+                parkings.Add(new ParkingDto
+                {
+                    ParkingId = parking.ParkingId,
+                    Name = parking.Name,
+                    Address = parking.Address,
+                    Capacity = parking.Capacity,
+                    PricePerHour = parking.PricePerHour,
+                    Status = parking.Status.ToString(),
+                });
+            }
+
+            return Result<List<ParkingDto>>.Success(parkings, result.Message);
         }
     }
 }
