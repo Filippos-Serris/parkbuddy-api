@@ -1,9 +1,7 @@
 ﻿using MediatR;
 using ParkBuddy.Application.Commands;
+using ParkBuddy.Application.Interfaces;
 using ParkBuddy.Contracts;
-using ParkBuddy.Domain.Entities;
-using ParkBuddy.Domain.Repositories;
-using ParkBuddy.Infrastructure.Data;
 
 namespace ParkBuddy.Application.Handlers.CommandHandlers
 {
@@ -11,7 +9,7 @@ namespace ParkBuddy.Application.Handlers.CommandHandlers
     {
         private readonly IParkingRepository parkingRepository;
 
-        public RegisterParkingHandler(ParkBuddyContext context, IParkingRepository parkingRepository)
+        public RegisterParkingHandler(IParkingRepository parkingRepository)
         {
             this.parkingRepository = parkingRepository;
         }

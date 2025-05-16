@@ -1,8 +1,8 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using ParkBuddy.Application.Interfaces;
 using ParkBuddy.Contracts;
 using ParkBuddy.Contracts.Dtos;
 using ParkBuddy.Domain.Entities;
-using ParkBuddy.Domain.Repositories;
 using ParkBuddy.Infrastructure.Data;
 
 namespace ParkBuddy.Infrastructure.Repositories

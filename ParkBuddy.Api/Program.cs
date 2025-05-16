@@ -1,8 +1,8 @@
 using FluentValidation;
 using Microsoft.EntityFrameworkCore;
 using ParkBuddy.Application.Handlers.QueryHandlers;
+using ParkBuddy.Application.Interfaces;
 using ParkBuddy.Application.Validation;
-using ParkBuddy.Domain.Repositories;
 using ParkBuddy.Infrastructure.Data;
 using ParkBuddy.Infrastructure.Repositories;
 using System.Text.Json.Serialization;

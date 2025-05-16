@@ -1,7 +1,7 @@
 ﻿using MediatR;
 using ParkBuddy.Application.Commands;
+using ParkBuddy.Application.Interfaces;
 using ParkBuddy.Contracts;
-using ParkBuddy.Domain.Repositories;
 
 namespace ParkBuddy.Application.Handlers.CommandHandlers
 {
