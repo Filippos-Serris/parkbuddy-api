@@ -1,7 +1,7 @@
 ﻿using MediatR;
-using ParkBuddy.Application.Common;
-using ParkBuddy.Application.Dtos;
 using ParkBuddy.Application.Queries;
+using ParkBuddy.Contracts;
+using ParkBuddy.Contracts.Dtos;
 using ParkBuddy.Domain.Repositories;
 
 namespace ParkBuddy.Application.Handlers.QueryHandlers

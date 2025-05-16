@@ -1,6 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <ItemGroup>
+    <ProjectReference Include="..\ParkBuddy.Contracts\ParkBuddy.Contracts.csproj" />
     <ProjectReference Include="..\ParkBuddy.Domain\ParkBuddy.Domain.csproj" />
   </ItemGroup>
 

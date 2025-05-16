@@ -10,5 +10,9 @@
     <EmbeddedResource Remove="obj\**" />
     <None Remove="obj\**" />
   </ItemGroup>
+  
+  <ItemGroup>
+    <ProjectReference Include="..\ParkBuddy.Contracts\ParkBuddy.Contracts.csproj" />
+  </ItemGroup>
 
 </Project>

@@ -1,9 +1,10 @@
 ﻿using MediatR;
-using ParkBuddy.Application.Dtos;
+using ParkBuddy.Contracts;
+using ParkBuddy.Contracts.Dtos;
 
 namespace ParkBuddy.Application.Commands
 {
-    public class RegisterParkingCommand: IRequest<Unit>
+    public class RegisterParkingCommand: IRequest<Result<Guid>>
     {
         public RegisterParkingDto ParkingDto { get; set; }
 

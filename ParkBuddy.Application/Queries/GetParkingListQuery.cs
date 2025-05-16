@@ -1,6 +1,6 @@
 using MediatR;
-using ParkBuddy.Application.Common;
-using ParkBuddy.Application.Dtos;
+using ParkBuddy.Contracts;
+using ParkBuddy.Contracts.Dtos;
 
 namespace ParkBuddy.Application.Queries
 {

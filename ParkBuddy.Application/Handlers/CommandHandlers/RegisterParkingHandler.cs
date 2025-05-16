@@ -1,36 +1,28 @@
 ﻿using MediatR;
 using ParkBuddy.Application.Commands;
+using ParkBuddy.Contracts;
 using ParkBuddy.Domain.Entities;
+using ParkBuddy.Domain.Repositories;
 using ParkBuddy.Infrastructure.Data;
 
 namespace ParkBuddy.Application.Handlers.CommandHandlers
 {
-    public class RegisterParkingHandler : IRequestHandler<RegisterParkingCommand, Unit>
+    public class RegisterParkingHandler : IRequestHandler<RegisterParkingCommand, Result<Guid>>
     {
-        private readonly ParkBuddyContext context;
+        private readonly IParkingRepository parkingRepository;
 
-        public RegisterParkingHandler(ParkBuddyContext context)
+        public RegisterParkingHandler(ParkBuddyContext context, IParkingRepository parkingRepository)
         {
-            this.context = context;
+            this.parkingRepository = parkingRepository;
         }
 
-        public async Task<Unit> Handle(RegisterParkingCommand request, CancellationToken cancellationToken)
+        public async Task<Result<Guid>> Handle(RegisterParkingCommand request, CancellationToken cancellationToken)
         {
-            var parking = new Parking
-            {
-                ParkingId = Guid.NewGuid(),
-                Name = request.ParkingDto.Name,
-                Address = request.ParkingDto.Address,
-                Capacity = request.ParkingDto.Capacity,
-                PricePerHour = request.ParkingDto.PricePerHour
-            };
+            var result = await parkingRepository.RegisterParkingAsync(request.ParkingDto);
 
-            context.Parkings.Add(parking);
-            var result = await context.SaveChangesAsync() > 0;
-
-            if (!result)
-                throw new Exception("Failed to register parkingRepository");
-            return Unit.Value;
+            if (!result.IsSuccess)
+                return Result<Guid>.Failure(result.Message);
+            return Result<Guid>.Success(result.Data, result.Message);
         }
     }
 }

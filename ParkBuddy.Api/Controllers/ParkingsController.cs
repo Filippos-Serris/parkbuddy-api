@@ -2,8 +2,8 @@ using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using ParkBuddy.Application;
 using ParkBuddy.Application.Commands;
-using ParkBuddy.Application.Dtos;
 using ParkBuddy.Application.Queries;
+using ParkBuddy.Contracts.Dtos;
 
 namespace ParkBuddy.Api.Controllers
 {
@@ -44,7 +44,10 @@ namespace ParkBuddy.Api.Controllers
         public async Task<IActionResult> RegisterParking(RegisterParkingDto parking)
         {
             var result = await mediator.Send(new RegisterParkingCommand(parking));
-            return Ok(new ApiResponse<object>(true, "Parking registeed successfully"));
+            
+            if (!result.IsSuccess)
+                return NotFound();
+            return Ok(result);
         }
 
         [HttpDelete]

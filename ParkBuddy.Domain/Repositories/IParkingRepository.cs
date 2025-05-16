@@ -1,8 +1,6 @@
-﻿using ParkBuddy.Application.Common;
+﻿using ParkBuddy.Contracts;
+using ParkBuddy.Contracts.Dtos;
 using ParkBuddy.Domain.Entities;
-using System;
-using System.Collections.Generic;
-using System.Threading.Tasks;
 
 namespace ParkBuddy.Domain.Repositories
 {
@@ -10,7 +8,10 @@ namespace ParkBuddy.Domain.Repositories
     {
         Task<Result<List<Parking>>> GetParkingListAsync();
         Task<Result<Parking>> GetParkingAsync(Guid parkingId);
+        Task<Result<Guid>> RegisterParkingAsync(RegisterParkingDto parking);
+
+
         Task<Result<string>> DeleteParkingAsync(Guid parkingId);
-        Task<Result<bool>> RegisterParkingAsync(Parking parking);
+        
     }
 }
