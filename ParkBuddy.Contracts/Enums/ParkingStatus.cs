@@ -1,4 +1,4 @@
-namespace ParkBuddy.Domain.Enums
+namespace ParkBuddy.Contracts.Enums
 {
     public enum ParkingStatus
     {

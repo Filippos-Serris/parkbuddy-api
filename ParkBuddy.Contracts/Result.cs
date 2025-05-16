@@ -1,4 +1,4 @@
-﻿namespace ParkBuddy.Application.Common
+﻿namespace ParkBuddy.Contracts
 {
     public class Result<T>
     {

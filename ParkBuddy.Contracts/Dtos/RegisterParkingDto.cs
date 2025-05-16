@@ -1,6 +1,6 @@
-using ParkBuddy.Domain.Enums;
+using ParkBuddy.Contracts.Enums;
 
-namespace ParkBuddy.Application.Dtos
+namespace ParkBuddy.Contracts.Dtos
 {
     public class RegisterParkingDto
     {
