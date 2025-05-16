@@ -20,23 +20,7 @@ namespace ParkBuddy.Application.Handlers.QueryHandlers
             var result = await parkingRepository.GetParkingListAsync();
 
             if (result.IsSuccess)
-            {
-                var parkings = new List<ParkingDto>();
-
-                foreach (var parking in result.Data)
-                {
-                    parkings.Add(new ParkingDto
-                    {
-                        ParkingId = parking.ParkingId,
-                        Name = parking.Name,
-                        Address = parking.Address,
-                        Capacity = parking.Capacity,
-                        PricePerHour = parking.PricePerHour,
-                        Status = parking.Status.ToString(),
-                    });
-                }
-                return Result<List<ParkingDto>>.Success(parkings, result.Message);
-            }
+                return Result<List<ParkingDto>>.Success(result.Data, result.Message);
             return Result<List<ParkingDto>>.Failure(result.Message);
         }
     }

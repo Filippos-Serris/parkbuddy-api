@@ -16,23 +16,43 @@ namespace ParkBuddy.Infrastructure.Repositories
             this.context = context;
         }
 
-        public async Task<Result<List<Parking>>> GetParkingListAsync()
+        public async Task<Result<List<ParkingDto>>> GetParkingListAsync()
         {
-            var result = await context.Parkings.
+            var result = await context.Parkings
+                .Select(p => new ParkingDto
+                {
+                    ParkingId = p.ParkingId,
+                    Name = p.Name,
+                    Address = p.Address,
+                    Capacity = p.Capacity,
+                    PricePerHour = p.PricePerHour,
+                    Status = p.Status.ToString(),
+                }).
                 ToListAsync();
 
             if (result == null)
-                return Result<List<Parking>>.Failure("Parkings not retrieved.");
-            return Result<List<Parking>>.Success(result, "Parkings retrieved succeffully");
+                return Result<List<ParkingDto>>.Failure("Parkings not retrieved.");
+            return Result<List<ParkingDto>>.Success(result, "Parkings retrieved succeffully");
         }
 
-        public async Task<Result<Parking>> GetParkingAsync(Guid ParkingId)
+        public async Task<Result<ParkingDto>> GetParkingAsync(Guid ParkingId)
         {
-            var result = await context.Parkings.FindAsync(ParkingId);
+            var result = await context.Parkings
+                .Where(p => p.ParkingId == ParkingId)
+                .Select(p => new ParkingDto
+                {
+                    ParkingId = p.ParkingId,
+                    Name = p.Name,
+                    Address = p.Address,
+                    Capacity = p.Capacity,
+                    PricePerHour = p.PricePerHour,
+                    Status = p.Status.ToString()
+                })
+                .FirstOrDefaultAsync();
 
             if (result == null)
-                return Result<Parking>.Failure("Parking not retrieved.");
-            return Result<Parking>.Success(result, "Parking retrieved succeffully");
+                return Result<ParkingDto>.Failure("Parking not retrieved.");
+            return Result<ParkingDto>.Success(result, "Parking retrieved succeffully");
         }
 
         public async Task<Result<Guid>> RegisterParkingAsync(RegisterParkingDto parking)
@@ -52,7 +72,7 @@ namespace ParkBuddy.Infrastructure.Repositories
 
             if (result)
                 return Result<Guid>.Success(newParking.ParkingId, "Parkign registered successfully");
-            return Result<Guid>.Failure("Failed to register parking");
+            return Result<Guid>.Failure("Failed to register p");
         }
 
         public async Task<Result<string>> DeleteParkingAsync(Guid parkingId)
@@ -61,7 +81,7 @@ namespace ParkBuddy.Infrastructure.Repositories
 
             if (result)
                 return Result<string>.Success("Deleted", "Parking deleted successfully");
-            return Result<string>.Failure("Failed to delete parking");
+            return Result<string>.Failure("Failed to delete p");
         }
     }
 }

@@ -20,18 +20,7 @@ namespace ParkBuddy.Application.Handlers.QueryHandlers
             var result = await parkingRepository.GetParkingAsync(request.ParkingId);
 
             if (result.IsSuccess)
-            {
-                var parking = new ParkingDto
-                {
-                    ParkingId = result.Data.ParkingId,
-                    Name = result.Data.Name,
-                    Address = result.Data.Address,
-                    Capacity = result.Data.Capacity,
-                    PricePerHour = result.Data.PricePerHour,
-                    Status = result.Data.Status.ToString(),
-                };
-                return Result<ParkingDto>.Success(parking, result.Message);
-            }
+                return Result<ParkingDto>.Success(result.Data, result.Message);
             return Result<ParkingDto>.Failure(result.Message);
         }
     }
