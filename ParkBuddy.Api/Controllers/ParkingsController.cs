@@ -1,6 +1,7 @@
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using ParkBuddy.Application.Commands;
+using ParkBuddy.Application.Interfaces;
 using ParkBuddy.Application.Queries;
 using ParkBuddy.Contracts.Dtos;
 
@@ -10,9 +11,9 @@ namespace ParkBuddy.Api.Controllers
     [Route("api/[controller]/")]
     public class ParkingsController : ControllerBase
     {
-        private readonly IMediator mediator;
+        private readonly IParkingMediatorService mediator;
 
-        public ParkingsController(IMediator mediator)
+        public ParkingsController(IParkingMediatorService mediator)
         {
             this.mediator = mediator;
         }
@@ -20,9 +21,9 @@ namespace ParkBuddy.Api.Controllers
         [HttpGet]
         public async Task<IActionResult> GetParkings()
         {
-            var result = await mediator.Send(new GetParkingListQuery());
+            var result = await mediator.GetParkings();
 
-            if(!result.IsSuccess)
+            if (!result.IsSuccess)
                 return NotFound();
             return Ok(result);
         }
@@ -31,7 +32,7 @@ namespace ParkBuddy.Api.Controllers
         [Route("parking")]
         public async Task<IActionResult> GetParking(Guid parkingId)
         {
-            var result = await mediator.Send(new GetParkingQuery(parkingId));
+            var result = await mediator.GetParking(parkingId);
 
             if (!result.IsSuccess)
                 return NotFound();
@@ -42,8 +43,8 @@ namespace ParkBuddy.Api.Controllers
         [Route("register")]
         public async Task<IActionResult> RegisterParking(RegisterParkingDto parking)
         {
-            var result = await mediator.Send(new RegisterParkingCommand(parking));
-            
+            var result = await mediator.RegisterParking(parking);
+
             if (!result.IsSuccess)
                 return NotFound();
             return Ok(result);
@@ -52,7 +53,7 @@ namespace ParkBuddy.Api.Controllers
         [HttpDelete]
         public async Task<IActionResult> DeleteParkingAsync(Guid parkingId)
         {
-            var result = await mediator.Send(new DeleteParkingCommand(parkingId));
+            var result = await mediator.DeleteParking(parkingId);
 
             if (!result.IsSuccess)
                 return NotFound(result.Message);
