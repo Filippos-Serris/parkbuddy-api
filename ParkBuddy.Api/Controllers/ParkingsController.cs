@@ -1,6 +1,5 @@
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
-using ParkBuddy.Application;
 using ParkBuddy.Application.Commands;
 using ParkBuddy.Application.Queries;
 using ParkBuddy.Contracts.Dtos;
