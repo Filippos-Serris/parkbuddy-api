@@ -6,20 +6,25 @@ MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ParkBuddy.Api", "ParkBuddy.Api\ParkBuddy.Api.csproj", "{0C204657-FD3E-4A84-9BDA-718F6DBD5693}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ParkBuddy.Application", "ParkBuddy.Application\ParkBuddy.Application.csproj", "{B7C5A879-F51F-427C-A61C-39A5166B17F9}"
+	ProjectSection(ProjectDependencies) = postProject
+		{16257891-EEC5-47F7-A9C9-636164E10AB4} = {16257891-EEC5-47F7-A9C9-636164E10AB4}
+	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ParkBuddy.Domain", "ParkBuddy.Domain\ParkBuddy.Domain.csproj", "{BC7F18FB-2F30-4AF6-A6DA-DEA631FD0868}"
+	ProjectSection(ProjectDependencies) = postProject
+		{16257891-EEC5-47F7-A9C9-636164E10AB4} = {16257891-EEC5-47F7-A9C9-636164E10AB4}
+	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ParkBuddy.Infrastructure", "ParkBuddy.Infrastructure\ParkBuddy.Infrastructure.csproj", "{AFEE6D63-C792-493B-9F0B-1E6102F91C9A}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ParkBuddy.Services", "ParkBuddy.Services\ParkBuddy.Services.csproj", "{644D5674-D1C3-4560-8B1B-60F2119BD1B4}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ParkBuddy.Contracts", "ParkBuddy.Contracts\ParkBuddy.Contracts.csproj", "{16257891-EEC5-47F7-A9C9-636164E10AB4}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
 		Release|Any CPU = Release|Any CPU
-	EndGlobalSection
-	GlobalSection(SolutionProperties) = preSolution
-		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
 		{0C204657-FD3E-4A84-9BDA-718F6DBD5693}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
@@ -42,5 +47,12 @@ Global
 		{644D5674-D1C3-4560-8B1B-60F2119BD1B4}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{644D5674-D1C3-4560-8B1B-60F2119BD1B4}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{644D5674-D1C3-4560-8B1B-60F2119BD1B4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{16257891-EEC5-47F7-A9C9-636164E10AB4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{16257891-EEC5-47F7-A9C9-636164E10AB4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{16257891-EEC5-47F7-A9C9-636164E10AB4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{16257891-EEC5-47F7-A9C9-636164E10AB4}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
 	EndGlobalSection
 EndGlobal
