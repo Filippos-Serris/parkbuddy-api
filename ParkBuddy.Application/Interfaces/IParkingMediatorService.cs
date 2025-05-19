@@ -1,10 +1,5 @@
 ﻿using ParkBuddy.Contracts;
 using ParkBuddy.Contracts.Dtos;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace ParkBuddy.Application.Interfaces
 {
@@ -14,5 +9,6 @@ namespace ParkBuddy.Application.Interfaces
         Task<Result<ParkingDto>> GetParking(Guid parkingId);
         Task<Result<Guid>> RegisterParking(RegisterParkingDto parking);
         Task<Result<string>> DeleteParking(Guid parkingId);
+        Task<Result<ParkingDto>> UpdateParking(UpdateParkingDto parking);
     }
 }

@@ -1,6 +1,5 @@
 ﻿using ParkBuddy.Contracts;
 using ParkBuddy.Contracts.Dtos;
-using ParkBuddy.Domain.Entities;
 
 namespace ParkBuddy.Application.Interfaces
 {
@@ -10,5 +9,6 @@ namespace ParkBuddy.Application.Interfaces
         Task<Result<ParkingDto>> GetParkingAsync(Guid parkingId);
         Task<Result<Guid>> RegisterParkingAsync(RegisterParkingDto parking);
         Task<Result<string>> DeleteParkingAsync(Guid parkingId);
+        Task<Result<ParkingDto>> UpdateParkingAsync(UpdateParkingDto parking);
     }
 }

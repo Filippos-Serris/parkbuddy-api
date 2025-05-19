@@ -1,4 +1,6 @@
-﻿namespace ParkBuddy.Contracts.Dtos
+﻿using ParkBuddy.Contracts.Enums;
+
+namespace ParkBuddy.Contracts.Dtos
 {
     public class ParkingDto
     {
@@ -7,6 +9,6 @@
         public string Address { get; set; }
         public int Capacity { get; set; }
         public decimal PricePerHour { get; set; }
-        public string Status { get; set; }
+        public ParkingStatus Status { get; set; }
     }
 }

@@ -1,9 +1,7 @@
-using MediatR;
 using Microsoft.AspNetCore.Mvc;
-using ParkBuddy.Application.Commands;
 using ParkBuddy.Application.Interfaces;
-using ParkBuddy.Application.Queries;
 using ParkBuddy.Contracts.Dtos;
+using System.Formats.Asn1;
 
 namespace ParkBuddy.Api.Controllers
 {
@@ -54,6 +52,17 @@ namespace ParkBuddy.Api.Controllers
         public async Task<IActionResult> DeleteParkingAsync(Guid parkingId)
         {
             var result = await mediator.DeleteParking(parkingId);
+
+            if (!result.IsSuccess)
+                return NotFound(result.Message);
+            return Ok(result.Data);
+        }
+
+        [HttpPut]
+        [Route("updateParking")]
+        public async Task<IActionResult> UpdateParking(UpdateParkingDto parking)
+        {
+            var result = await mediator.UpdateParking(parking);
 
             if (!result.IsSuccess)
                 return NotFound(result.Message);

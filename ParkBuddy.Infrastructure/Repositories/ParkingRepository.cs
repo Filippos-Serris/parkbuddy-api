@@ -2,6 +2,7 @@
 using ParkBuddy.Application.Interfaces;
 using ParkBuddy.Contracts;
 using ParkBuddy.Contracts.Dtos;
+using ParkBuddy.Contracts.Enums;
 using ParkBuddy.Domain.Entities;
 using ParkBuddy.Infrastructure.Data;
 
@@ -26,7 +27,7 @@ namespace ParkBuddy.Infrastructure.Repositories
                     Address = p.Address,
                     Capacity = p.Capacity,
                     PricePerHour = p.PricePerHour,
-                    Status = p.Status.ToString(),
+                    Status = p.Status,
                 }).
                 ToListAsync();
 
@@ -46,7 +47,7 @@ namespace ParkBuddy.Infrastructure.Repositories
                     Address = p.Address,
                     Capacity = p.Capacity,
                     PricePerHour = p.PricePerHour,
-                    Status = p.Status.ToString()
+                    Status = p.Status
                 })
                 .FirstOrDefaultAsync();
 
@@ -82,6 +83,36 @@ namespace ParkBuddy.Infrastructure.Repositories
             if (result)
                 return Result<string>.Success("Deleted", "Parking deleted successfully");
             return Result<string>.Failure("Failed to delete p");
+        }
+
+        public async Task<Result<ParkingDto>> UpdateParkingAsync(UpdateParkingDto updateParking)
+        {
+            var parking = await context.Parkings.FindAsync(updateParking.ParkingId);
+
+            if (parking == null)
+                return Result<ParkingDto>.Failure("Failed to delete p");
+
+            parking.Name = updateParking.Name;
+            parking.Address = updateParking.Address;
+            parking.Capacity = updateParking.Capacity;
+            parking.PricePerHour = updateParking.PricePerHour;
+            parking.Status = updateParking.Status;
+
+            var result = await context.SaveChangesAsync() > 0;
+
+            if (result)
+            {
+                var updatedParking = new ParkingDto
+                {
+                    ParkingId = parking.ParkingId,
+                    Name = parking.Name,
+                    Capacity = parking.Capacity,
+                    PricePerHour = parking.PricePerHour,
+                    Status = parking.Status,
+                };
+                return Result<ParkingDto>.Success(updatedParking, "Parking updated successfully");
+            }    
+            return Result<ParkingDto>.Failure("Failed to update parking");           
         }
     }
 }

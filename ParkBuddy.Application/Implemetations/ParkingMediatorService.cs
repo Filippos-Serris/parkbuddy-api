@@ -35,5 +35,10 @@ namespace ParkBuddy.Application.Implemetations
         {
             return await mediator.Send(new DeleteParkingCommand(parkingId));
         }
+
+        public async Task<Result<ParkingDto>> UpdateParking(UpdateParkingDto parking)
+        {
+            return await mediator.Send(new UpdateParkingCommand(parking));
+        }
     }
 }
