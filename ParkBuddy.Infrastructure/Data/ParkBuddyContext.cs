@@ -8,6 +8,7 @@ namespace ParkBuddy.Infrastructure.Data
         public ParkBuddyContext(DbContextOptions options) : base(options) { }
 
         public DbSet<Parking> Parkings { get; set; }
+        public DbSet<User> Users { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
