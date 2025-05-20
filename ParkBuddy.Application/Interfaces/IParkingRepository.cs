@@ -1,14 +1,14 @@
-using ParkBuddy.Application.Dtos;
-using ParkBuddy.Domain.Entities;
+﻿using ParkBuddy.Contracts;
+using ParkBuddy.Contracts.Dtos;
 
 namespace ParkBuddy.Application.Interfaces
 {
     public interface IParkingRepository
     {
-        Task<Parking> GetParkingAsync(Guid parkingId);
-        Task<List<Parking>> GetParkingsAsync();
-        Task<Parking> RegisterParkingAsync(RegisterParkingDto parking);
-
-        Task<bool> DeleteParkingAsync(Guid parkingId);
+        Task<Result<List<ParkingDto>>> GetParkingListAsync();
+        Task<Result<ParkingDto>> GetParkingAsync(Guid parkingId);
+        Task<Result<Guid>> RegisterParkingAsync(RegisterParkingDto parking);
+        Task<Result<string>> DeleteParkingAsync(Guid parkingId);
+        Task<Result<ParkingDto>> UpdateParkingAsync(UpdateParkingDto parking);
     }
 }

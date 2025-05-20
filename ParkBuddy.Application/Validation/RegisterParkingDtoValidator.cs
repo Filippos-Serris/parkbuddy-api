@@ -1,6 +1,5 @@
-using System.Data;
 using FluentValidation;
-using ParkBuddy.Application.Dtos;
+using ParkBuddy.Contracts.Dtos;
 
 namespace ParkBuddy.Application.Validation
 {

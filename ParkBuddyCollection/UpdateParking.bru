@@ -1,0 +1,22 @@
+meta {
+  name: UpdateParking
+  type: http
+  seq: 6
+}
+
+put {
+  url: http://localhost:5204/api/Parkings/updateParking
+  body: json
+  auth: inherit
+}
+
+body:json {
+  {
+        "parkingId": "a1f4b29a-8b2e-4a89-a67e-1c4f85b62b29",
+        "name": "Downtown Parking",
+        "address": "123 Main St, City Center",
+        "capacity": 100,
+        "pricePerHour": 100,
+        "status": "Open"
+      }
+}

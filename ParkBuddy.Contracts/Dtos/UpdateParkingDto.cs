@@ -1,9 +1,10 @@
-using ParkBuddy.Domain.Enums;
+﻿using ParkBuddy.Contracts.Enums;
 
-namespace ParkBuddy.Application.Dtos
+namespace ParkBuddy.Contracts.Dtos
 {
-    public class RegisterParkingDto
+    public class UpdateParkingDto
     {
+        public Guid ParkingId { get; set; }
         public string Name { get; set; }
         public string Address { get; set; }
         public int Capacity { get; set; }

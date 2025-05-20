@@ -1,9 +1,5 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+using ParkBuddy.Contracts.Enums;
 using ParkBuddy.Domain.Entities;
-using ParkBuddy.Domain.Enums;
 
 namespace ParkBuddy.Services.Services
 {

@@ -1,0 +1,15 @@
+meta {
+  name: DeleteParking
+  type: http
+  seq: 5
+}
+
+delete {
+  url: http://localhost:5204/api/Parkings?parkingId=3e3939d3-9c52-492c-938e-51164ca074e9
+  body: none
+  auth: inherit
+}
+
+params:query {
+  parkingId: 3e3939d3-9c52-492c-938e-51164ca074e9
+}

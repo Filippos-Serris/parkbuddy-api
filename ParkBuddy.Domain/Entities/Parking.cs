@@ -1,6 +1,6 @@
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using ParkBuddy.Domain.Enums;
+using ParkBuddy.Contracts.Enums;
 
 namespace ParkBuddy.Domain.Entities
 {

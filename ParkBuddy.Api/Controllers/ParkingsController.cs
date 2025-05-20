@@ -1,9 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
-using ParkBuddy.Application;
-using ParkBuddy.Application.Dtos;
 using ParkBuddy.Application.Interfaces;
-using ParkBuddy.Application.Validation;
-using ParkBuddy.Domain.Entities;
+using ParkBuddy.Contracts.Dtos;
+using System.Formats.Asn1;
 
 namespace ParkBuddy.Api.Controllers
 {
@@ -11,63 +9,64 @@ namespace ParkBuddy.Api.Controllers
     [Route("api/[controller]/")]
     public class ParkingsController : ControllerBase
     {
-        private readonly IParkingRepository parkingRepository;
-        public ParkingsController(IParkingRepository parkingRepository)
+        private readonly IParkingMediatorService mediator;
+
+        public ParkingsController(IParkingMediatorService mediator)
         {
-            this.parkingRepository = parkingRepository;
+            this.mediator = mediator;
         }
 
         [HttpGet]
         public async Task<IActionResult> GetParkings()
         {
-            var result = await parkingRepository.GetParkingsAsync();
+            var result = await mediator.GetParkings();
 
-            if (result == null || !result.Any())
-                return Ok(new ApiResponse<object>(true, "No parkings available", new List<Parking>()));
-
-            return Ok(new ApiResponse<List<Parking>>(true, "Parkings retrieved successfully", result));
+            if (!result.IsSuccess)
+                return NotFound();
+            return Ok(result);
         }
 
-        [HttpGet("{parkingId}")]
+        [HttpGet]
+        [Route("parking")]
         public async Task<IActionResult> GetParking(Guid parkingId)
         {
-            var result = await parkingRepository.GetParkingAsync(parkingId);
+            var result = await mediator.GetParking(parkingId);
 
-            if (result == null)
-                return NotFound(new ApiResponse<object>(false, "Parking not found"));
-
-            return Ok(new ApiResponse<Parking>(true, "Parking retrieved successfully", result));
+            if (!result.IsSuccess)
+                return NotFound();
+            return Ok(result);
         }
 
         [HttpPost]
+        [Route("register")]
         public async Task<IActionResult> RegisterParking(RegisterParkingDto parking)
         {
-            var validator = new RegisterParkingDtoValidator();
-            var validationResult = await validator.ValidateAsync(parking);
+            var result = await mediator.RegisterParking(parking);
 
-            if (!validationResult.IsValid)
-            {
-                var errors = validationResult.Errors.Select(e => e.ErrorMessage).ToList();
-                return BadRequest(new ApiResponse<object>(false, "Validation failed", errors));
-            }
-
-            var result = await parkingRepository.RegisterParkingAsync(parking);
-
-            if (result == null)
-                return StatusCode(500, new ApiResponse<object>(false, "Failed to register parking"));
-
-            return Ok(new ApiResponse<Parking>(true, "Parking register successfully", result));
+            if (!result.IsSuccess)
+                return NotFound();
+            return Ok(result);
         }
 
         [HttpDelete]
         public async Task<IActionResult> DeleteParkingAsync(Guid parkingId)
         {
-            var result = await parkingRepository.DeleteParkingAsync(parkingId);
+            var result = await mediator.DeleteParking(parkingId);
 
-            if (!result)
-                return NotFound(new ApiResponse<object>(false, "Parking not found"));
+            if (!result.IsSuccess)
+                return NotFound(result.Message);
+            return Ok(result.Data);
+        }
 
-            return Ok(new ApiResponse<object>(true, "Parking deleted successfully"));
+        [HttpPut]
+        [Route("updateParking")]
+        public async Task<IActionResult> UpdateParking(UpdateParkingDto parking)
+        {
+            var result = await mediator.UpdateParking(parking);
+
+            if (!result.IsSuccess)
+                return NotFound(result.Message);
+            return Ok(result.Data);
         }
     }
 }

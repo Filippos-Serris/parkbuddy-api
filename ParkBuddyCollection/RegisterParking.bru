@@ -1,0 +1,21 @@
+meta {
+  name: RegisterParking
+  type: http
+  seq: 4
+}
+
+post {
+  url: http://localhost:5204/api/Parkings/register
+  body: json
+  auth: inherit
+}
+
+body:json {
+  {
+    "name": "Bruno Parking",
+    "address": "localhost",
+    "capacity": 100,
+    "pricePerHour": 3,
+    "status": "Open"
+  }
+}
