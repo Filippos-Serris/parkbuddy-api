@@ -1,14 +1,15 @@
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using ParkBuddy.Domain.Entities;
 
 namespace ParkBuddy.Infrastructure.Data
 {
-    public class ParkBuddyContext : DbContext
+    public class ParkBuddyContext : IdentityDbContext<User, IdentityRole<Guid>, Guid> // <UserEntity, RoleEtity<PK used by role>, PK used by Entity>
     {
-        public ParkBuddyContext(DbContextOptions options) : base(options) { }
+        public ParkBuddyContext(DbContextOptions<ParkBuddyContext> options) : base(options) { }
 
         public DbSet<Parking> Parkings { get; set; }
-        public DbSet<User> Users { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
