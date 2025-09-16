@@ -1,5 +1,5 @@
 ﻿using MediatR;
-using ParkBuddy.Application.Commands;
+using ParkBuddy.Application.Commands.Parkings;
 using ParkBuddy.Application.Interfaces;
 using ParkBuddy.Contracts;
 

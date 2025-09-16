@@ -1,7 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 using ParkBuddy.Application.Interfaces;
 using ParkBuddy.Contracts.Dtos;
-using System.Formats.Asn1;
 
 namespace ParkBuddy.Api.Controllers
 {

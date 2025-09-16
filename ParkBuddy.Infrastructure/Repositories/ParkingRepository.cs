@@ -73,7 +73,7 @@ namespace ParkBuddy.Infrastructure.Repositories
 
             if (result)
                 return Result<Guid>.Success(newParking.ParkingId, "Parkign registered successfully");
-            return Result<Guid>.Failure("Failed to register p");
+            return Result<Guid>.Failure("Failed to register parking");
         }
 
         public async Task<Result<string>> DeleteParkingAsync(Guid parkingId)

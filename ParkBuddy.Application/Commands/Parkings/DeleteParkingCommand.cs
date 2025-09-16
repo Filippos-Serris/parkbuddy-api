@@ -1,7 +1,7 @@
 ﻿using MediatR;
 using ParkBuddy.Contracts;
 
-namespace ParkBuddy.Application.Commands
+namespace ParkBuddy.Application.Commands.Parkings
 {
     public class DeleteParkingCommand : IRequest<Result<string>>
     {

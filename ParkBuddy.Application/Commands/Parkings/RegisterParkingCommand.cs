@@ -2,13 +2,13 @@
 using ParkBuddy.Contracts;
 using ParkBuddy.Contracts.Dtos;
 
-namespace ParkBuddy.Application.Commands
+namespace ParkBuddy.Application.Commands.Parkings
 {
-    public class RegisterParkingCommand: IRequest<Result<Guid>>
+    public class RegisterParkingCommand : IRequest<Result<Guid>>
     {
         public RegisterParkingDto ParkingDto { get; set; }
 
-        public RegisterParkingCommand(RegisterParkingDto parking) 
+        public RegisterParkingCommand(RegisterParkingDto parking)
         {
             ParkingDto = parking;
         }
