@@ -12,6 +12,11 @@
   </ItemGroup>
   
   <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.Identity" Version="2.3.1" />
+    <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="9.0.5" />
+  </ItemGroup>
+  
+  <ItemGroup>
     <ProjectReference Include="..\ParkBuddy.Contracts\ParkBuddy.Contracts.csproj" />
   </ItemGroup>
 

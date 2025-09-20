@@ -27,8 +27,16 @@ namespace ParkBuddy.Application.Handlers.CommandHandlers.Users
 
             var result = await _userManager.CreateAsync(user, request.userDto.Password);
 
-            if (result.Succeeded == true)
-                return Result<Guid>.Success(user.Id, "Successful registration");
+            if (result.Succeeded)
+            {
+                var role = request.userDto.Role.ToString();
+
+                var roleResult = await _userManager.AddToRoleAsync(user, request.userDto.Role.ToString());
+                if (roleResult.Succeeded)
+                    return Result<Guid>.Success(user.Id, "Successful registration");
+                else
+                    return Result<Guid>.Failure("Registration succeeded, but failed to assign");
+            }
             return Result<Guid>.Failure("Registeaton failed");
         }
     }

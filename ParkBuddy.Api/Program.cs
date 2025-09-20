@@ -7,6 +7,7 @@ using ParkBuddy.Application.Interfaces;
 using ParkBuddy.Application.Validation;
 using ParkBuddy.Domain.Entities;
 using ParkBuddy.Infrastructure.Data;
+using ParkBuddy.Infrastructure.Identity;
 using ParkBuddy.Infrastructure.Repositories;
 using System.Text.Json.Serialization;
 
@@ -38,6 +39,8 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 var app = builder.Build();
+
+await IdentitySeeder.SeedRoles(app.Services);
 
 if (app.Environment.IsDevelopment())
 {
