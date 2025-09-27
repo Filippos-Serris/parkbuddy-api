@@ -1,9 +1,9 @@
 ﻿using MediatR;
-using ParkBuddy.Contracts;
+using ParkBuddy.Contracts.Common;
 
 namespace ParkBuddy.Application.Commands.Parkings
 {
-    public class DeleteParkingCommand : IRequest<Result<string>>
+    public class DeleteParkingCommand : IRequest<Result<bool>>
     {
         public Guid ParkingId { get; set; }
         public DeleteParkingCommand(Guid parkingId)

@@ -1,8 +1,8 @@
 ﻿using MediatR;
 using ParkBuddy.Application.Commands.Parkings;
+using ParkBuddy.Application.Dtos.Parkings;
 using ParkBuddy.Application.Interfaces;
-using ParkBuddy.Contracts;
-using ParkBuddy.Contracts.Dtos;
+using ParkBuddy.Contracts.Common;
 
 namespace ParkBuddy.Application.Handlers.CommandHandlers
 {
@@ -17,7 +17,7 @@ namespace ParkBuddy.Application.Handlers.CommandHandlers
 
         public async Task<Result<ParkingDto>> Handle(UpdateParkingCommand request, CancellationToken cancellationToken)
         {
-            var result = await repository.UpdateParkingAsync(request.ParkingDto);
+            var result = await repository.UpdateParkingAsync(request);
 
             if (!result.IsSuccess)
                 return Result<ParkingDto>.Failure(result.Message);

@@ -1,27 +1,26 @@
 using MediatR;
 using ParkBuddy.Application.Interfaces;
-using ParkBuddy.Application.Queries;
-using ParkBuddy.Contracts;
-using ParkBuddy.Contracts.Dtos;
+using ParkBuddy.Application.Queries.Parkings;
+using ParkBuddy.Contracts.Common;
 
 namespace ParkBuddy.Application.Handlers.QueryHandlers
 {
-    public class GetParkingListHandler : IRequestHandler<GetParkingListQuery, Result<List<ParkingDto>>>
+    public class GetParkingListHandler : IRequestHandler<GetParkingListQuery, Result<GetParkingListQueryResult>>
     {
-        private readonly IParkingRepository parkingRepository;
+        private readonly IParkingRepository repository;
 
-        public GetParkingListHandler(IParkingRepository parking)
+        public GetParkingListHandler(IParkingRepository repository)
         {
-            this.parkingRepository = parking;
+            this.repository = repository;
         }
 
-        public async Task<Result<List<ParkingDto>>> Handle(GetParkingListQuery request, CancellationToken cancellationToken)
+        public async Task<Result<GetParkingListQueryResult>> Handle(GetParkingListQuery query, CancellationToken cancellationToken)
         {
-            var result = await parkingRepository.GetParkingListAsync();
+            var parkingList = await repository.GetParkingListAsync();
 
-            if (result.IsSuccess)
-                return Result<List<ParkingDto>>.Success(result.Data, result.Message);
-            return Result<List<ParkingDto>>.Failure(result.Message);
+            if (parkingList.IsSuccess)
+                return Result<GetParkingListQueryResult>.Success(new GetParkingListQueryResult(parkingList.Data), parkingList.Message);
+            return Result<GetParkingListQueryResult>.Failure(parkingList.Message);
         }
     }
 }

@@ -1,16 +1,12 @@
 ﻿using MediatR;
-using ParkBuddy.Contracts;
-using ParkBuddy.Contracts.Dtos;
+using ParkBuddy.Contracts.Common;
+using ParkBuddy.Domain.ValueObjects;
 
 namespace ParkBuddy.Application.Commands.Parkings
 {
-    public class RegisterParkingCommand : IRequest<Result<Guid>>
-    {
-        public RegisterParkingDto ParkingDto { get; set; }
-
-        public RegisterParkingCommand(RegisterParkingDto parking)
-        {
-            ParkingDto = parking;
-        }
-    }
+    public record RegisterParkingCommand(
+        string Name,
+        Address Address,
+        int Capacity,
+        decimal PricePerHour) : IRequest<Result<Guid>>;
 }

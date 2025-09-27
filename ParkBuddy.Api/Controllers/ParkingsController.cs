@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
+using ParkBuddy.Api.Dtos.Parking;
+using ParkBuddy.Application.Commands.Parkings;
 using ParkBuddy.Application.Interfaces;
-using ParkBuddy.Contracts.Dtos;
 
 namespace ParkBuddy.Api.Controllers
 {
@@ -26,7 +27,7 @@ namespace ParkBuddy.Api.Controllers
         }
 
         [HttpGet]
-        [Route("parking")]
+        [Route("{parkingId}")]
         public async Task<IActionResult> GetParking(Guid parkingId)
         {
             var result = await mediator.GetParking(parkingId);
@@ -37,10 +38,14 @@ namespace ParkBuddy.Api.Controllers
         }
 
         [HttpPost]
-        [Route("register")]
-        public async Task<IActionResult> RegisterParking(RegisterParkingDto parking)
+        public async Task<IActionResult> RegisterParking(RegisterParkingRequest request)
         {
-            var result = await mediator.RegisterParking(parking);
+            var result = await mediator.RegisterParking(
+                new RegisterParkingCommand(
+                    request.Name,
+                    new Domain.ValueObjects.Address(request.Address.StreetName, request.Address.Number, request.Address.PostalCode),
+                    request.Capacity,
+                    request.PricePerHour));
 
             if (!result.IsSuccess)
                 return NotFound();
@@ -48,6 +53,7 @@ namespace ParkBuddy.Api.Controllers
         }
 
         [HttpDelete]
+        [Route("{parkingId}")]
         public async Task<IActionResult> DeleteParkingAsync(Guid parkingId)
         {
             var result = await mediator.DeleteParking(parkingId);
@@ -58,10 +64,16 @@ namespace ParkBuddy.Api.Controllers
         }
 
         [HttpPut]
-        [Route("updateParking")]
-        public async Task<IActionResult> UpdateParking(UpdateParkingDto parking)
+        [Route("{parkingId}")]
+        public async Task<IActionResult> UpdateParking(Guid parkingId, UpadateParkingRequest parking)
         {
-            var result = await mediator.UpdateParking(parking);
+            var result = await mediator.UpdateParking(new UpdateParkingCommand(
+                parkingId,
+                parking.Name,
+                new Domain.ValueObjects.Address(parking.Address.StreetName, parking.Address.Number, parking.Address.PostalCode),
+                parking.Capacity,
+                parking.PricePerHour,
+                parking.Status));
 
             if (!result.IsSuccess)
                 return NotFound(result.Message);

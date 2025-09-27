@@ -1,10 +1,9 @@
 ﻿using MediatR;
-using ParkBuddy.Contracts;
-using ParkBuddy.Contracts.Dtos;
+using ParkBuddy.Contracts.Common;
 
-namespace ParkBuddy.Application.Queries
+namespace ParkBuddy.Application.Queries.Parkings
 {
-    public class GetParkingQuery : IRequest<Result<ParkingDto>>
+    public class GetParkingQuery : IRequest<Result<GetParkingQueryResult>>
     {
         public Guid ParkingId { get; set; }
 
