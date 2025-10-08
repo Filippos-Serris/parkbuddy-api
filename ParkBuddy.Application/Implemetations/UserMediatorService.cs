@@ -1,8 +1,7 @@
 ﻿using MediatR;
 using ParkBuddy.Application.Commands.Users;
 using ParkBuddy.Application.Interfaces;
-using ParkBuddy.Contracts;
-using ParkBuddy.Contracts.Dtos.Users;
+using ParkBuddy.Contracts.Common;
 
 namespace ParkBuddy.Application.Implemetations
 {
@@ -15,9 +14,9 @@ namespace ParkBuddy.Application.Implemetations
             this.meditor = mediator;
         }
 
-        public async Task<Result<Guid>> RegisterUser(RegisterUserDto user)
+        public async Task<Result<Guid>> RegisterUser(RegisterUserCommand user)
         {
-            return await meditor.Send(new RegisterUserCommand(user));
+            return await meditor.Send(user);
         }
     }
 }

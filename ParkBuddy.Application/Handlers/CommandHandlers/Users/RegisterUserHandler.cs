@@ -1,43 +1,25 @@
 ﻿using MediatR;
-using Microsoft.AspNetCore.Identity;
 using ParkBuddy.Application.Commands.Users;
-using ParkBuddy.Contracts;
-using ParkBuddy.Domain.Entities;
+using ParkBuddy.Application.Interfaces;
+using ParkBuddy.Contracts.Common;
 
 namespace ParkBuddy.Application.Handlers.CommandHandlers.Users
 {
     public class RegisterUserHandler : IRequestHandler<RegisterUserCommand, Result<Guid>>
     {
-        private readonly UserManager<User> _userManager;
+        private readonly IUserRepository _repository;
 
-        public RegisterUserHandler(UserManager<User> userManager)
+        public RegisterUserHandler(IUserRepository repository)
         {
-            _userManager = userManager;
+            _repository = repository;
         }
         public async Task<Result<Guid>> Handle(RegisterUserCommand request, CancellationToken cancellationToken)
         {
-            var user = new User
-            {
-                Id = Guid.NewGuid(),
-                UserName = request.userDto.Email,
-                Email = request.userDto.Email,
-                FirstName = request.userDto.FirstName,
-                LastName = request.userDto.LastName
-            };
+            var result = await _repository.RegisterUserAsync(request);
 
-            var result = await _userManager.CreateAsync(user, request.userDto.Password);
-
-            if (result.Succeeded)
-            {
-                var role = request.userDto.Role.ToString();
-
-                var roleResult = await _userManager.AddToRoleAsync(user, request.userDto.Role.ToString());
-                if (roleResult.Succeeded)
-                    return Result<Guid>.Success(user.Id, "Successful registration");
-                else
-                    return Result<Guid>.Failure("Registration succeeded, but failed to assign");
-            }
-            return Result<Guid>.Failure("Registeaton failed");
+            if (!result.IsSuccess)
+                return Result<Guid>.Failure(result.Message);
+            return Result<Guid>.Success(result.Data, result.Message);
         }
     }
 }

@@ -22,15 +22,18 @@ builder.Services.AddIdentity<User, IdentityRole<Guid>>()
 // Application services
 builder.Services.AddScoped<IUserMediatorService, UserMediatorService>();
 builder.Services.AddScoped<IParkingMediatorService, ParkingMediatorService>();
+builder.Services.AddScoped<IAuthMediatorService, AuthMediatorService>();
 
 // DB Context and Repositories
 builder.Services.AddDbContext<ParkBuddyContext>(options =>
     options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
 builder.Services.AddScoped<IParkingRepository, ParkingRepository>();
+builder.Services.AddScoped<IUserRepository, UserRepository>();
+builder.Services.AddScoped<IAuthRepository, AuthRepository>();
 
 // JWT configuration
 var jwtSettings = builder.Configuration.GetSection("JwtSettings");
-var key = Encoding.UTF8.GetBytes(jwtSettings["SKey"]);
+var key = Encoding.UTF8.GetBytes(jwtSettings["Key"]);
 builder.Services.AddAuthentication(options =>
 {
     options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;

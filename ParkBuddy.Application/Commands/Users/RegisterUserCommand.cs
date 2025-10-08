@@ -1,9 +1,13 @@
 ﻿using MediatR;
-using ParkBuddy.Contracts;
-using ParkBuddy.Contracts.Dtos.Users;
+using ParkBuddy.Contracts.Common;
+using ParkBuddy.Contracts.Enums;
 
 namespace ParkBuddy.Application.Commands.Users
 {
     public record RegisterUserCommand(
-        RegisterUserDto userDto) : IRequest<Result<Guid>>;
+        string FirstName,
+        string LastName,
+        string Email,
+        string Password,
+        Roles Role) : IRequest<Result<Guid>>;
 }

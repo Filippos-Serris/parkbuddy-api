@@ -3,8 +3,8 @@ using ParkBuddy.Contracts.Common;
 
 namespace ParkBuddy.Application.Interfaces
 {
-    public interface IUserMediatorService
+    public interface IUserRepository
     {
-        Task<Result<Guid>> RegisterUser(RegisterUserCommand user);
+        Task<Result<Guid>> RegisterUserAsync(RegisterUserCommand user);
     }
 }

@@ -1,8 +1,8 @@
 ﻿using ParkBuddy.Contracts.Enums;
 
-namespace ParkBuddy.Contracts.Dtos.Users
+namespace ParkBuddy.Api.Dtos.User
 {
-    public record RegisterUserDto(
+    public record RegisterUserRequestDto(
         string FirstName,
         string LastName,
         string Email,

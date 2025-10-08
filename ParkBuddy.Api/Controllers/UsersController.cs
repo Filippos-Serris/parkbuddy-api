@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using ParkBuddy.Api.Dtos.User;
+using ParkBuddy.Application.Commands.Users;
 using ParkBuddy.Application.Interfaces;
-using ParkBuddy.Contracts.Dtos.Users;
 
 namespace ParkBuddy.Api.Controllers
 {
@@ -15,43 +16,20 @@ namespace ParkBuddy.Api.Controllers
             this.mediator = mediator;
         }
 
-
         [HttpPost]
-        public async Task<IActionResult> RegisterUser(RegisterUserDto user)
+        public async Task<IActionResult> RegisterUser(RegisterUserRequestDto user)
         {
-            var result = await mediator.RegisterUser(user);
+            var result = await mediator.RegisterUser(
+                new RegisterUserCommand(
+                    user.FirstName,
+                    user.LastName,
+                    user.Email,
+                    user.Password,
+                    user.Role));
+
             if (!result.IsSuccess)
                 return NotFound();
             return Ok(result);
-        }
-
-
-        [HttpGet]
-        public async Task<IActionResult> GetUsers()
-        {
-            return NotFound();
-        }
-
-
-        [HttpGet]
-        [Route("{userId}")]
-        public async Task<IActionResult> GetUser(Guid userId)
-        {
-            return NotFound();
-        }
-
-        [HttpPatch]
-        [Route("{userId}")]
-        public async Task<IActionResult> UpdateUser(Guid userId)
-        {
-            return NotFound();
-        }
-
-        [HttpDelete]
-        [Route("{userId}")]
-        public async Task<IActionResult> DeleteUser(Guid userId)
-        {
-            return NotFound();
         }
     }
 }
