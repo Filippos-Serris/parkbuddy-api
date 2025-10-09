@@ -65,6 +65,12 @@ builder.Services.AddSwaggerGen();
 
 var app = builder.Build();
 
+
+using (var scope = app.Services.CreateScope())
+{
+    var db = scope.ServiceProvider.GetRequiredService<ParkBuddyContext>();
+    db.Database.Migrate(); // This applies any pending migrations and creates the database if it doesn't exist
+}
 await IdentitySeeder.SeedRoles(app.Services);
 
 if (app.Environment.IsDevelopment())
