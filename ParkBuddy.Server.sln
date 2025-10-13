@@ -20,8 +20,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ParkBuddy.Infrastructure", 
 		{B7C5A879-F51F-427C-A61C-39A5166B17F9} = {B7C5A879-F51F-427C-A61C-39A5166B17F9}
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ParkBuddy.Services", "ParkBuddy.Services\ParkBuddy.Services.csproj", "{644D5674-D1C3-4560-8B1B-60F2119BD1B4}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ParkBuddy.Contracts", "ParkBuddy.Contracts\ParkBuddy.Contracts.csproj", "{16257891-EEC5-47F7-A9C9-636164E10AB4}"
 EndProject
 Global
