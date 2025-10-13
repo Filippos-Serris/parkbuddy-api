@@ -8,6 +8,7 @@ using ParkBuddy.Domain.Entities;
 using ParkBuddy.Infrastructure.Data;
 using ParkBuddy.Infrastructure.Identity;
 using ParkBuddy.Infrastructure.Repositories;
+using ParkBuddy.Infrastructure.Services;
 using System.Text;
 using System.Text.Json.Serialization;
 
@@ -23,6 +24,7 @@ builder.Services.AddIdentity<User, IdentityRole<Guid>>()
 builder.Services.AddScoped<IUserMediatorService, UserMediatorService>();
 builder.Services.AddScoped<IParkingMediatorService, ParkingMediatorService>();
 builder.Services.AddScoped<IAuthMediatorService, AuthMediatorService>();
+builder.Services.AddScoped<IJwtTokenService, JwtTokenService>();
 
 // DB Context and Repositories
 builder.Services.AddDbContext<ParkBuddyContext>(options =>

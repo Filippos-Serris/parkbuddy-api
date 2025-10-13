@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using ParkBuddy.Api.Dtos.Parking;
 using ParkBuddy.Application.Commands.Parkings;
@@ -6,6 +7,7 @@ using ParkBuddy.Application.Interfaces;
 namespace ParkBuddy.Api.Controllers
 {
     [ApiController]
+    [Authorize]
     [Route("api/[controller]/")]
     public class ParkingsController : ControllerBase
     {
@@ -17,6 +19,7 @@ namespace ParkBuddy.Api.Controllers
         }
 
         [HttpGet]
+        [Authorize(Roles = "Customer,Admin")]
         public async Task<IActionResult> GetParkings()
         {
             var result = await mediator.GetParkings();
@@ -27,6 +30,7 @@ namespace ParkBuddy.Api.Controllers
         }
 
         [HttpGet]
+        [Authorize(Roles = "Customer,Admin")]
         [Route("{parkingId}")]
         public async Task<IActionResult> GetParking(Guid parkingId)
         {
@@ -38,6 +42,7 @@ namespace ParkBuddy.Api.Controllers
         }
 
         [HttpPost]
+        [Authorize(Roles = "Owner,Admin")]
         public async Task<IActionResult> RegisterParking(RegisterParkingRequest request)
         {
             var result = await mediator.RegisterParking(
@@ -53,6 +58,7 @@ namespace ParkBuddy.Api.Controllers
         }
 
         [HttpDelete]
+        [Authorize(Roles = "Owner,Admin")]
         [Route("{parkingId}")]
         public async Task<IActionResult> DeleteParkingAsync(Guid parkingId)
         {
@@ -64,6 +70,7 @@ namespace ParkBuddy.Api.Controllers
         }
 
         [HttpPut]
+        [Authorize(Roles = "Owner,Admin")]
         [Route("{parkingId}")]
         public async Task<IActionResult> UpdateParking(Guid parkingId, UpadateParkingRequest parking)
         {

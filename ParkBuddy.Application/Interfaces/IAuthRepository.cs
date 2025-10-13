@@ -1,10 +1,11 @@
 ﻿using ParkBuddy.Application.Commands.Users;
+using ParkBuddy.Application.Dtos.User;
 using ParkBuddy.Contracts.Common;
 
 namespace ParkBuddy.Application.Interfaces
 {
     public interface IAuthRepository
     {
-        Task<Result<LoginResponseCommand>> LoginAsync(LoginCommand command);
+        Task<Result<LoginDto>> LoginAsync(LoginCommand command);
     }
 }
