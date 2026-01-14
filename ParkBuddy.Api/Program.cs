@@ -23,7 +23,6 @@ builder.Services.AddIdentity<User, IdentityRole<Guid>>()
     .AddDefaultTokenProviders();
 
 // Application services
-builder.Services.AddScoped<IUserMediatorService, UserMediatorService>();
 builder.Services.AddScoped<IParkingMediatorService, ParkingMediatorService>();
 builder.Services.AddScoped<IAuthMediatorService, AuthMediatorService>();
 builder.Services.AddScoped<IJwtTokenService, JwtTokenService>();

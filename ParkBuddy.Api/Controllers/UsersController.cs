@@ -1,7 +1,7 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using MediatR;
+using Microsoft.AspNetCore.Mvc;
 using ParkBuddy.Api.Dtos.User;
 using ParkBuddy.Application.Commands.Users;
-using ParkBuddy.Application.Interfaces;
 
 namespace ParkBuddy.Api.Controllers
 {
@@ -9,17 +9,16 @@ namespace ParkBuddy.Api.Controllers
     [Route("api/[controller]")]
     public class UsersController : ControllerBase
     {
-        private readonly IUserMediatorService mediator;
-
-        public UsersController(IUserMediatorService mediator)
+        private readonly IMediator _mediator;
+        public UsersController(IMediator mediator)
         {
-            this.mediator = mediator;
+            _mediator = mediator;
         }
 
         [HttpPost]
         public async Task<IActionResult> RegisterUser(RegisterUserRequestDto user)
         {
-            var result = await mediator.RegisterUser(
+            var result = await _mediator.Send(
                 new RegisterUserCommand(
                     user.FirstName,
                     user.LastName,
