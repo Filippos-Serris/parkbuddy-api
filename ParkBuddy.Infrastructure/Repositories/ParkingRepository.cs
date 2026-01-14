@@ -10,16 +10,16 @@ namespace ParkBuddy.Infrastructure.Repositories
 {
     public class ParkingRepository : IParkingRepository
     {
-        private readonly ParkBuddyContext context;
+        private readonly ParkBuddyContext _context;
 
         public ParkingRepository(ParkBuddyContext context)
         {
-            this.context = context;
+            _context = context;
         }
 
         public async Task<Result<List<ParkingDto>>> GetParkingListAsync()
         {
-            var parkings = await context.Parkings
+            var parkings = await _context.Parkings
                 .Select(p => new ParkingDto(
                     p.ParkingId,
                     p.Name,
@@ -36,7 +36,7 @@ namespace ParkBuddy.Infrastructure.Repositories
 
         public async Task<Result<ParkingDto>> GetParkingAsync(Guid ParkingId)
         {
-            var result = await context.Parkings
+            var result = await _context.Parkings
                 .Where(p => p.ParkingId == ParkingId)
                 .Select(p => new ParkingDto(
                     p.ParkingId,
@@ -65,8 +65,8 @@ namespace ParkBuddy.Infrastructure.Repositories
                 PricePerHour = command.PricePerHour
             };
 
-            context.Add(newParking);
-            var result = await context.SaveChangesAsync() > 0;
+            _context.Add(newParking);
+            var result = await _context.SaveChangesAsync() > 0;
 
             if (result)
                 return Result<Guid>.Success(newParking.ParkingId, "Parkign registered successfully");
@@ -75,7 +75,7 @@ namespace ParkBuddy.Infrastructure.Repositories
 
         public async Task<Result<bool>> DeleteParkingAsync(Guid parkingId)
         {
-            var result = await context.Parkings.Where(p => p.ParkingId == parkingId).ExecuteDeleteAsync() > 0;
+            var result = await _context.Parkings.Where(p => p.ParkingId == parkingId).ExecuteDeleteAsync() > 0;
 
             if (result)
                 return Result<bool>.Success(true, "Parking deleted successfully");
@@ -84,7 +84,7 @@ namespace ParkBuddy.Infrastructure.Repositories
 
         public async Task<Result<ParkingDto>> UpdateParkingAsync(UpdateParkingCommand newParking)
         {
-            var parking = await context.Parkings.FindAsync(newParking.Id);
+            var parking = await _context.Parkings.FindAsync(newParking.Id);
 
             if (parking == null)
                 return Result<ParkingDto>.Failure("Parking not found, failed to delete.");
@@ -95,7 +95,7 @@ namespace ParkBuddy.Infrastructure.Repositories
             parking.PricePerHour = newParking.PricePerHour;
             parking.Status = newParking.Status;
 
-            var result = await context.SaveChangesAsync() > 0;
+            var result = await _context.SaveChangesAsync() > 0;
 
             if (result)
             {

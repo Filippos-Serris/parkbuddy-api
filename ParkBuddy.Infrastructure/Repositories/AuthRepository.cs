@@ -10,30 +10,30 @@ namespace ParkBuddy.Infrastructure.Repositories
 {
     public class AuthRepository : IAuthRepository
     {
-        private readonly UserManager<User> userManager;
-        private readonly SignInManager<User> signInManager;
+        private readonly UserManager<User> _userManager;
+        private readonly SignInManager<User> _signInManager;
 
         public AuthRepository(UserManager<User> userManager, SignInManager<User> signInManager)
         {
-            this.userManager = userManager;
-            this.signInManager = signInManager;
+            _userManager = userManager;
+            _signInManager = signInManager;
         }
 
         public async Task<Result<LoginDto>> LoginAsync(LoginCommand command)
         {
-            var user = await userManager.FindByEmailAsync(command.Email);
+            var user = await _userManager.FindByEmailAsync(command.Email);
             if (user == null)
             {
                 return Result<LoginDto>.Failure("No user found with this email");
             }
 
-            var result = await signInManager.CheckPasswordSignInAsync(user, command.Password, false);
+            var result = await _signInManager.CheckPasswordSignInAsync(user, command.Password, false);
             if (!result.Succeeded)
             {
                 return Result<LoginDto>.Failure("Invalid password");
             }
 
-            var role = (await userManager.GetRolesAsync(user)).FirstOrDefault();
+            var role = (await _userManager.GetRolesAsync(user)).FirstOrDefault();
             if (!Enum.TryParse<Roles>(role, true, out var roleEnum))
                 throw new InvalidOperationException($"Role '{role}' is not defined in Roles enum.");
 

@@ -7,16 +7,16 @@ namespace ParkBuddy.Application.Handlers.CommandHandlers
 {
     public class DeleteParkingHandler : IRequestHandler<DeleteParkingCommand, Result<bool>>
     {
-        private readonly IParkingRepository parking;
+        private readonly IParkingRepository _repository;
 
-        public DeleteParkingHandler(IParkingRepository parking)
+        public DeleteParkingHandler(IParkingRepository repository)
         {
-            this.parking = parking;
+            this._repository = repository;
         }
 
         public async Task<Result<bool>> Handle(DeleteParkingCommand request, CancellationToken cancellationToken)
         {
-            var result = await parking.DeleteParkingAsync(request.ParkingId);
+            var result = await _repository.DeleteParkingAsync(request.ParkingId);
 
             if (!result.IsSuccess)
                 return Result<bool>.Failure(result.Message);

@@ -7,16 +7,16 @@ namespace ParkBuddy.Application.Handlers.CommandHandlers
 {
     public class RegisterParkingHandler : IRequestHandler<RegisterParkingCommand, Result<Guid>>
     {
-        private readonly IParkingRepository repository;
+        private readonly IParkingRepository _repository;
 
         public RegisterParkingHandler(IParkingRepository repository)
         {
-            this.repository = repository;
+            _repository = repository;
         }
 
         public async Task<Result<Guid>> Handle(RegisterParkingCommand request, CancellationToken cancellationToken)
         {
-            var result = await repository.RegisterParkingAsync(request);
+            var result = await _repository.RegisterParkingAsync(request);
 
             if (!result.IsSuccess)
                 return Result<Guid>.Failure(result.Message);

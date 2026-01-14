@@ -7,16 +7,16 @@ namespace ParkBuddy.Application.Handlers.QueryHandlers
 {
     public class GetParkingListHandler : IRequestHandler<GetParkingListQuery, Result<GetParkingListQueryResult>>
     {
-        private readonly IParkingRepository repository;
+        private readonly IParkingRepository _repository;
 
         public GetParkingListHandler(IParkingRepository repository)
         {
-            this.repository = repository;
+            _repository = repository;
         }
 
         public async Task<Result<GetParkingListQueryResult>> Handle(GetParkingListQuery query, CancellationToken cancellationToken)
         {
-            var parkingList = await repository.GetParkingListAsync();
+            var parkingList = await _repository.GetParkingListAsync();
 
             if (parkingList.IsSuccess)
                 return Result<GetParkingListQueryResult>.Success(new GetParkingListQueryResult(parkingList.Data), parkingList.Message);

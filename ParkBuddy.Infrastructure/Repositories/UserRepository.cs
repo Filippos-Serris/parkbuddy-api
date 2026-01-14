@@ -10,17 +10,17 @@ namespace ParkBuddy.Infrastructure.Repositories
     public class UserRepository : IUserRepository
     {
         private readonly UserManager<User> _userManager;
-        private readonly ParkBuddyContext context;
+        private readonly ParkBuddyContext _context;
 
         public UserRepository(ParkBuddyContext context, UserManager<User> userManager)
         {
-            this.context = context;
+            _context = context;
             _userManager = userManager;
         }
 
         public async Task<Result<Guid>> RegisterUserAsync(RegisterUserCommand user)
         {
-            using var transaction = await context.Database.BeginTransactionAsync();
+            using var transaction = await _context.Database.BeginTransactionAsync();
 
             var newUser = new User
             {
