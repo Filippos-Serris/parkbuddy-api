@@ -24,7 +24,6 @@ builder.Services.AddIdentity<User, IdentityRole<Guid>>()
 
 // Application services
 builder.Services.AddScoped<IParkingMediatorService, ParkingMediatorService>();
-builder.Services.AddScoped<IAuthMediatorService, AuthMediatorService>();
 builder.Services.AddScoped<IJwtTokenService, JwtTokenService>();
 
 // DB Context and Repositories

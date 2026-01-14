@@ -1,6 +1,6 @@
-﻿using Microsoft.AspNetCore.Identity.Data;
+﻿using MediatR;
+using Microsoft.AspNetCore.Identity.Data;
 using Microsoft.AspNetCore.Mvc;
-using ParkBuddy.Application.Interfaces;
 
 namespace ParkBuddy.Api.Controllers
 {
@@ -8,19 +8,19 @@ namespace ParkBuddy.Api.Controllers
     [Route("api/[controller]")]
     public class AuthController : ControllerBase
     {
-        private readonly IAuthMediatorService mediator;
+        private readonly IMediator _mediator;
 
-        public AuthController(IAuthMediatorService mediator)
+        public AuthController(IMediator mediator)
         {
-            this.mediator = mediator;
+            _mediator = mediator;
         }
 
         [HttpPost]
         public async Task<IActionResult> Login([FromBody] LoginRequest request)
         {
-            var result = await mediator.Login(new Application.Commands.Users.LoginCommand(request.Email, request.Password));
-            
-            if(result.IsSuccess)
+            var result = await _mediator.Send(new Application.Commands.Users.LoginCommand(request.Email, request.Password));
+
+            if (result.IsSuccess)
                 return Ok(result);
             return Unauthorized(result);
         }
