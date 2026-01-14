@@ -3,7 +3,6 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Cors.Infrastructure;
 using ParkBuddy.Application.Handlers.QueryHandlers;
-using ParkBuddy.Application.Implemetations;
 using ParkBuddy.Application.Interfaces;
 using ParkBuddy.Domain.Entities;
 using ParkBuddy.Infrastructure.Data;
@@ -23,7 +22,6 @@ builder.Services.AddIdentity<User, IdentityRole<Guid>>()
     .AddDefaultTokenProviders();
 
 // Application services
-builder.Services.AddScoped<IParkingMediatorService, ParkingMediatorService>();
 builder.Services.AddScoped<IJwtTokenService, JwtTokenService>();
 
 // DB Context and Repositories

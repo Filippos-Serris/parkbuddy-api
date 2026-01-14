@@ -1,8 +1,9 @@
+using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using ParkBuddy.Api.Dtos.Parking;
 using ParkBuddy.Application.Commands.Parkings;
-using ParkBuddy.Application.Interfaces;
+using ParkBuddy.Application.Queries.Parkings;
 
 namespace ParkBuddy.Api.Controllers
 {
@@ -11,11 +12,11 @@ namespace ParkBuddy.Api.Controllers
     [Route("api/[controller]/")]
     public class ParkingsController : ControllerBase
     {
-        private readonly IParkingMediatorService mediator;
+        private readonly IMediator _mediator;
 
-        public ParkingsController(IParkingMediatorService mediator)
+        public ParkingsController(IMediator mediator)
         {
-            this.mediator = mediator;
+            _mediator = mediator;
         }
 
         /// <summary>
@@ -26,7 +27,7 @@ namespace ParkBuddy.Api.Controllers
         [Authorize(Roles = "Customer,Admin")]
         public async Task<IActionResult> GetParkings()
         {
-            var result = await mediator.GetParkings();
+            var result = await _mediator.Send(new GetParkingListQuery());
 
             if (!result.IsSuccess)
                 return NotFound();
@@ -43,7 +44,7 @@ namespace ParkBuddy.Api.Controllers
         [Route("{parkingId}")]
         public async Task<IActionResult> GetParking(Guid parkingId)
         {
-            var result = await mediator.GetParking(parkingId);
+            var result = await _mediator.Send(new GetParkingQuery(parkingId));
 
             if (!result.IsSuccess)
                 return NotFound();
@@ -54,7 +55,7 @@ namespace ParkBuddy.Api.Controllers
         [Authorize(Roles = "Owner,Admin")]
         public async Task<IActionResult> RegisterParking([FromBody] RegisterParkingRequest request)
         {
-            var result = await mediator.RegisterParking(
+            var result = await _mediator.Send(
                 new RegisterParkingCommand(
                     request.Name,
                     new Domain.ValueObjects.Address(request.Address.StreetName, request.Address.Number, request.Address.PostalCode),
@@ -71,7 +72,7 @@ namespace ParkBuddy.Api.Controllers
         [Route("{parkingId}")]
         public async Task<IActionResult> DeleteParkingAsync(Guid parkingId)
         {
-            var result = await mediator.DeleteParking(parkingId);
+            var result = await _mediator.Send(new DeleteParkingCommand(parkingId));
 
             if (!result.IsSuccess)
                 return NotFound(result.Message);
@@ -83,7 +84,7 @@ namespace ParkBuddy.Api.Controllers
         [Route("{parkingId}")]
         public async Task<IActionResult> UpdateParking(Guid parkingId, UpadateParkingRequest parking)
         {
-            var result = await mediator.UpdateParking(new UpdateParkingCommand(
+            var result = await _mediator.Send(new UpdateParkingCommand(
                 parkingId,
                 parking.Name,
                 new Domain.ValueObjects.Address(parking.Address.StreetName, parking.Address.Number, parking.Address.PostalCode),
