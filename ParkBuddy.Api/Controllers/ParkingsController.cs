@@ -7,7 +7,7 @@ using ParkBuddy.Application.Interfaces;
 namespace ParkBuddy.Api.Controllers
 {
     [ApiController]
-    [Authorize]
+    //[Authorize]
     [Route("api/[controller]/")]
     public class ParkingsController : ControllerBase
     {
@@ -18,8 +18,12 @@ namespace ParkBuddy.Api.Controllers
             this.mediator = mediator;
         }
 
+        /// <summary>
+        /// Get list of availabe parkings
+        /// </summary>
+        /// <returns></returns>
         [HttpGet]
-        [Authorize(Roles = "Customer,Admin")]
+        //[Authorize(Roles = "Customer,Admin")]
         public async Task<IActionResult> GetParkings()
         {
             var result = await mediator.GetParkings();
@@ -29,8 +33,13 @@ namespace ParkBuddy.Api.Controllers
             return Ok(result);
         }
 
+        /// <summary>
+        /// Get a spesific parking by providing a parkingId
+        /// </summary>
+        /// <param name="parkingId"></param>
+        /// <returns></returns>
         [HttpGet]
-        [Authorize(Roles = "Customer,Admin")]
+        //[Authorize(Roles = "Customer,Admin")]
         [Route("{parkingId}")]
         public async Task<IActionResult> GetParking(Guid parkingId)
         {
@@ -42,8 +51,8 @@ namespace ParkBuddy.Api.Controllers
         }
 
         [HttpPost]
-        [Authorize(Roles = "Owner,Admin")]
-        public async Task<IActionResult> RegisterParking(RegisterParkingRequest request)
+        //[Authorize(Roles = "Owner,Admin")]
+        public async Task<IActionResult> RegisterParking([FromBody] RegisterParkingRequest request)
         {
             var result = await mediator.RegisterParking(
                 new RegisterParkingCommand(
@@ -70,7 +79,7 @@ namespace ParkBuddy.Api.Controllers
         }
 
         [HttpPut]
-        [Authorize(Roles = "Owner,Admin")]
+        //[Authorize(Roles = "Owner,Admin")]
         [Route("{parkingId}")]
         public async Task<IActionResult> UpdateParking(Guid parkingId, UpadateParkingRequest parking)
         {

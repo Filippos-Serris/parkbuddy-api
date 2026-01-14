@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Cors.Infrastructure;
 using ParkBuddy.Application.Handlers.QueryHandlers;
 using ParkBuddy.Application.Implemetations;
 using ParkBuddy.Application.Interfaces;
@@ -11,6 +12,7 @@ using ParkBuddy.Infrastructure.Repositories;
 using ParkBuddy.Infrastructure.Services;
 using System.Text;
 using System.Text.Json.Serialization;
+
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -64,9 +66,9 @@ builder.Services
 builder.Services.AddOpenApi();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+builder.Services.AddCors();
 
 var app = builder.Build();
-
 
 using (var scope = app.Services.CreateScope())
 {
@@ -81,6 +83,8 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
+
+app.UseCors(options => options.AllowAnyHeader().AllowAnyMethod().WithOrigins("http://localhost:5173"));
 
 app.UseHttpsRedirection();
 app.MapControllers();

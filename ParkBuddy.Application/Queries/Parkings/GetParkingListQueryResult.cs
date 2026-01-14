@@ -2,7 +2,7 @@
 
 namespace ParkBuddy.Application.Queries.Parkings
 {
-    public record GetParkingListQueryResult(ParkingListDto Parkings)
+    public record GetParkingListQueryResult(List<ParkingDto> Parkings)
     {
     }
 }
