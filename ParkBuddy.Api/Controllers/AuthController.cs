@@ -1,6 +1,7 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Identity.Data;
 using Microsoft.AspNetCore.Mvc;
+using ParkBuddy.Application.Commands.Users;
 
 namespace ParkBuddy.Api.Controllers
 {
@@ -18,7 +19,7 @@ namespace ParkBuddy.Api.Controllers
         [HttpPost]
         public async Task<IActionResult> Login([FromBody] LoginRequest request)
         {
-            var result = await _mediator.Send(new Application.Commands.Users.LoginCommand(request.Email, request.Password));
+            var result = await _mediator.Send(new LoginCommand(request.Email, request.Password));
 
             if (result.IsSuccess)
                 return Ok(result);

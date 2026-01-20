@@ -19,6 +19,7 @@
     <ProjectReference Include="..\ParkBuddy.Application\ParkBuddy.Application.csproj" />
     <ProjectReference Include="..\ParkBuddy.Infrastructure\ParkBuddy.Infrastructure.csproj" />
     <ProjectReference Include="..\ParkBuddy.Domain\ParkBuddy.Domain.csproj" />
+    <ProjectReference Include="..\ParkBuddy.Contracts\ParkBuddy.Contracts.csproj" />
   </ItemGroup>
 
 </Project>
