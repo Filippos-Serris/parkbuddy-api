@@ -1,7 +1,6 @@
-namespace ParkBuddy.Application.Interfaces
+namespace ParkBuddy.Application.Interfaces;
+
+public interface IJwtTokenService
 {
-    public interface IJwtTokenService
-    {
-        string GenerateToken(Guid id, string email, string role);
-    }
+    string GenerateToken(Guid id, string email, string role);
 }

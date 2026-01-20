@@ -6,39 +6,38 @@ using ParkBuddy.Contracts.Common;
 using ParkBuddy.Contracts.Enums;
 using ParkBuddy.Domain.Entities;
 
-namespace ParkBuddy.Infrastructure.Repositories
+namespace ParkBuddy.Infrastructure.Repositories;
+
+public class AuthRepository : IAuthRepository
 {
-    public class AuthRepository : IAuthRepository
+    private readonly UserManager<User> _userManager;
+    private readonly SignInManager<User> _signInManager;
+
+    public AuthRepository(UserManager<User> userManager, SignInManager<User> signInManager)
     {
-        private readonly UserManager<User> _userManager;
-        private readonly SignInManager<User> _signInManager;
+        _userManager = userManager;
+        _signInManager = signInManager;
+    }
 
-        public AuthRepository(UserManager<User> userManager, SignInManager<User> signInManager)
+    public async Task<Result<LoginDto>> LoginAsync(LoginCommand command)
+    {
+        var user = await _userManager.FindByEmailAsync(command.Email);
+        if (user == null)
         {
-            _userManager = userManager;
-            _signInManager = signInManager;
+            return Result<LoginDto>.Failure("No user found with this email");
         }
 
-        public async Task<Result<LoginDto>> LoginAsync(LoginCommand command)
+        var result = await _signInManager.CheckPasswordSignInAsync(user, command.Password, false);
+        if (!result.Succeeded)
         {
-            var user = await _userManager.FindByEmailAsync(command.Email);
-            if (user == null)
-            {
-                return Result<LoginDto>.Failure("No user found with this email");
-            }
-
-            var result = await _signInManager.CheckPasswordSignInAsync(user, command.Password, false);
-            if (!result.Succeeded)
-            {
-                return Result<LoginDto>.Failure("Invalid password");
-            }
-
-            var role = (await _userManager.GetRolesAsync(user)).FirstOrDefault();
-            if (!Enum.TryParse<Roles>(role, true, out var roleEnum))
-                throw new InvalidOperationException($"Role '{role}' is not defined in Roles enum.");
-
-            return Result<LoginDto>.Success(new LoginDto(
-                user.Id, roleEnum), "User loged in");
+            return Result<LoginDto>.Failure("Invalid password");
         }
+
+        var role = (await _userManager.GetRolesAsync(user)).FirstOrDefault();
+        if (!Enum.TryParse<Roles>(role, true, out var roleEnum))
+            throw new InvalidOperationException($"Role '{role}' is not defined in Roles enum.");
+
+        return Result<LoginDto>.Success(new LoginDto(
+            user.Id, roleEnum), "User loged in");
     }
 }

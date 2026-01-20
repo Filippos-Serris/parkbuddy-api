@@ -1,10 +1,9 @@
 ﻿using ParkBuddy.Application.Commands.Users;
 using ParkBuddy.Contracts.Common;
 
-namespace ParkBuddy.Application.Interfaces
+namespace ParkBuddy.Application.Interfaces;
+
+public interface IUserRepository
 {
-    public interface IUserRepository
-    {
-        Task<Result<Guid>> RegisterUserAsync(RegisterUserCommand user);
-    }
+    Task<Result<Guid>> RegisterUserAsync(RegisterUserCommand user);
 }

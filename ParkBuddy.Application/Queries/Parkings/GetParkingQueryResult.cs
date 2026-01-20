@@ -1,8 +1,7 @@
 ﻿using ParkBuddy.Application.Dtos.Parkings;
 
-namespace ParkBuddy.Application.Queries.Parkings
+namespace ParkBuddy.Application.Queries.Parkings;
+
+public record GetParkingQueryResult(ParkingDto parking)
 {
-    public record GetParkingQueryResult(ParkingDto parking)
-    {
-    }
 }

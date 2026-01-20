@@ -1,9 +1,8 @@
-﻿namespace ParkBuddy.Contracts.Enums
+﻿namespace ParkBuddy.Contracts.Enums;
+
+public enum Roles
 {
-    public enum Roles
-    {
-        Admin,
-        Customer,
-        Owner
-    }
+    Admin,
+    Customer,
+    Owner
 }
