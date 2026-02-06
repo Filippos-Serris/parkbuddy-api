@@ -4,6 +4,8 @@ using Microsoft.AspNetCore.Mvc;
 using ParkBuddy.Api.Dtos.Parking;
 using ParkBuddy.Application.Commands.Parkings;
 using ParkBuddy.Application.Queries.Parkings;
+using ParkBuddy.Contracts.Common;
+using ParkBuddy.Contracts.Responses;
 
 namespace ParkBuddy.Api.Controllers;
 
@@ -20,22 +22,36 @@ public class ParkingsController : ControllerBase
     }
 
     /// <summary>
-    /// Get list of availabe parkings
+    /// Get list of available parkings
     /// </summary>
     /// <returns></returns>
     [HttpGet]
     [Authorize(Roles = "Customer,Admin")]
     public async Task<IActionResult> GetParkings()
     {
-        var result = await _mediator.Send(new GetParkingListQuery());
+        var data = await _mediator.Send(new GetParkingListQuery());
 
-        if (!result.IsSuccess)
+        if (!data.IsSuccess)
             return NotFound();
-        return Ok(result);
+
+        var response = new GetParkingListResponse(
+            Result<List<ParkingList>>.Success(
+                data.Data.Select(p => new ParkingList(
+                    p.Id,
+                    p.Name,
+                    $"{p.Address.StreetName} {p.Address.Number}, {p.Address.PostalCode}",
+                    p.PricePerHour,
+                    p.Status.ToString()
+                )).ToList(),
+                data.Message
+            )
+        );
+
+        return Ok(response);
     }
 
     /// <summary>
-    /// Get a spesific parking by providing a parkingId
+    /// Get a specific parking by providing a parkingId
     /// </summary>
     /// <param name="parkingId"></param>
     /// <returns></returns>
@@ -47,7 +63,7 @@ public class ParkingsController : ControllerBase
         var result = await _mediator.Send(new GetParkingQuery(parkingId));
 
         if (!result.IsSuccess)
-            return NotFound();
+            return NotFound(result);
         return Ok(result);
     }
 

@@ -17,21 +17,22 @@ public class ParkingRepository : IParkingRepository
         _context = context;
     }
 
-    public async Task<Result<List<ParkingDto>>> GetParkingListAsync()
+    public async Task<Result<List<ParkingListDto>>> GetParkingListAsync()
     {
         var parkings = await _context.Parkings
-            .Select(p => new ParkingDto(
+            .Select(p => new ParkingListDto(
                 p.ParkingId,
                 p.Name,
                 p.Address,
-                p.Capacity,
                 p.PricePerHour,
                 p.Status
-            )).ToListAsync();
+            ))
+            .AsNoTracking()
+            .ToListAsync();
 
         if (parkings == null)
-            return Result<List<ParkingDto>>.Failure("Parkings not retrieved.");
-        return Result<List<ParkingDto>>.Success(parkings, "Parkings retrieved succeffully");
+            return Result<List<ParkingListDto>>.Failure("Parkings not retrieved.");
+        return Result<List<ParkingListDto>>.Success(parkings, "Parkings retrieved successfully");
     }
 
     public async Task<Result<ParkingDto>> GetParkingAsync(Guid ParkingId)
@@ -50,7 +51,7 @@ public class ParkingRepository : IParkingRepository
 
         if (result == null)
             return Result<ParkingDto>.Failure("Parking not retrieved.");
-        return Result<ParkingDto>.Success(result, "Parking retrieved succeffully");
+        return Result<ParkingDto>.Success(result, "Parking retrieved successfully");
     }
 
     public async Task<Result<Guid>> RegisterParkingAsync(RegisterParkingCommand command)
@@ -60,7 +61,7 @@ public class ParkingRepository : IParkingRepository
         {
             ParkingId = Guid.NewGuid(),
             Name = command.Name,
-            Address = command.Address.ToString(),
+            Address = command.Address,
             Capacity = command.Capacity,
             PricePerHour = command.PricePerHour
         };
@@ -69,7 +70,7 @@ public class ParkingRepository : IParkingRepository
         var result = await _context.SaveChangesAsync() > 0;
 
         if (result)
-            return Result<Guid>.Success(newParking.ParkingId, "Parkign registered successfully");
+            return Result<Guid>.Success(newParking.ParkingId, "Parking registered successfully");
         return Result<Guid>.Failure("Failed to register command");
     }
 
@@ -90,7 +91,7 @@ public class ParkingRepository : IParkingRepository
             return Result<ParkingDto>.Failure("Parking not found, failed to delete.");
 
         parking.Name = newParking.Name;
-        parking.Address = newParking.Address.ToString();
+        parking.Address = newParking.Address;
         parking.Capacity = newParking.Capacity;
         parking.PricePerHour = newParking.PricePerHour;
         parking.Status = newParking.Status;

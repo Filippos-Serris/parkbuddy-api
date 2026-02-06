@@ -1,11 +1,12 @@
 using MediatR;
+using ParkBuddy.Application.Dtos.Parkings;
 using ParkBuddy.Application.Interfaces;
 using ParkBuddy.Application.Queries.Parkings;
 using ParkBuddy.Contracts.Common;
 
 namespace ParkBuddy.Application.Handlers.QueryHandlers;
 
-public class GetParkingListHandler : IRequestHandler<GetParkingListQuery, Result<GetParkingListQueryResult>>
+public class GetParkingListHandler : IRequestHandler<GetParkingListQuery, Result<List<ParkingListDto>>>
 {
     private readonly IParkingRepository _repository;
 
@@ -14,12 +15,12 @@ public class GetParkingListHandler : IRequestHandler<GetParkingListQuery, Result
         _repository = repository;
     }
 
-    public async Task<Result<GetParkingListQueryResult>> Handle(GetParkingListQuery query, CancellationToken cancellationToken)
+    public async Task<Result<List<ParkingListDto>>> Handle(GetParkingListQuery query, CancellationToken cancellationToken)
     {
         var parkingList = await _repository.GetParkingListAsync();
 
         if (parkingList.IsSuccess)
-            return Result<GetParkingListQueryResult>.Success(new GetParkingListQueryResult(parkingList.Data), parkingList.Message);
-        return Result<GetParkingListQueryResult>.Failure(parkingList.Message);
+            return Result<List<ParkingListDto>>.Success(parkingList.Data, parkingList.Message);
+        return Result<List<ParkingListDto>>.Failure(parkingList.Message);
     }
 }

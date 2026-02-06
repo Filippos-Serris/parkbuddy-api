@@ -1,6 +1,7 @@
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using ParkBuddy.Contracts.Enums;
+using ParkBuddy.Domain.ValueObjects;
 
 namespace ParkBuddy.Domain.Entities;
 
@@ -12,7 +13,7 @@ public class Parking
     [Required]
     public string Name { get; set; }
     [Required]
-    public string Address { get; set; }
+    public Address Address { get; set; }
     [Required]
     public int Capacity { get; set; }
     [Required]

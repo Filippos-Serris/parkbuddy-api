@@ -1,13 +1,12 @@
 ﻿using ParkBuddy.Contracts.Enums;
+using ParkBuddy.Domain.ValueObjects;
 
 namespace ParkBuddy.Application.Dtos.Parkings;
 
 public record ParkingDto(
     Guid Id,
     string Name,
-    string Address,
+    Address Address,
     int Capacity,
     decimal PricePerHour,
-    ParkingStatus Status)
-{
-}
+    ParkingStatus Status);
