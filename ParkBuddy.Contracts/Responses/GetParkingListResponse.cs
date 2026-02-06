@@ -2,9 +2,9 @@ using ParkBuddy.Contracts.Common;
 
 namespace ParkBuddy.Contracts.Responses
 {
-    public record GetParkingListResponse(Result<List<ParkingList>> Result);
+    public record GetParkingListResponse(Result<List<ParkingListItem>> Result);
 
-    public record ParkingList(
+    public record ParkingListItem(
         Guid Id,
         string Name,
         string Address,

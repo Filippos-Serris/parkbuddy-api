@@ -10,7 +10,7 @@ using ParkBuddy.Contracts.Responses;
 namespace ParkBuddy.Api.Controllers;
 
 [ApiController]
-[Authorize]
+//[Authorize]
 [Route("api/[controller]/")]
 public class ParkingsController : ControllerBase
 {
@@ -26,7 +26,7 @@ public class ParkingsController : ControllerBase
     /// </summary>
     /// <returns></returns>
     [HttpGet]
-    [Authorize(Roles = "Customer,Admin")]
+    //[Authorize(Roles = "Customer,Admin")]
     public async Task<IActionResult> GetParkings()
     {
         var data = await _mediator.Send(new GetParkingListQuery());
@@ -35,8 +35,8 @@ public class ParkingsController : ControllerBase
             return NotFound();
 
         var response = new GetParkingListResponse(
-            Result<List<ParkingList>>.Success(
-                data.Data.Select(p => new ParkingList(
+            Result<List<ParkingListItem>>.Success(
+                data.Data.Select(p => new ParkingListItem(
                     p.Id,
                     p.Name,
                     $"{p.Address.StreetName} {p.Address.Number}, {p.Address.PostalCode}",
@@ -56,15 +56,27 @@ public class ParkingsController : ControllerBase
     /// <param name="parkingId"></param>
     /// <returns></returns>
     [HttpGet]
-    [Authorize(Roles = "Customer,Admin")]
+    //[Authorize(Roles = "Customer,Admin")]
     [Route("{parkingId}")]
     public async Task<IActionResult> GetParking(Guid parkingId)
     {
-        var result = await _mediator.Send(new GetParkingQuery(parkingId));
+        var data = await _mediator.Send(new GetParkingQuery(parkingId));
 
-        if (!result.IsSuccess)
-            return NotFound(result);
-        return Ok(result);
+        if (!data.IsSuccess)
+            return NotFound();
+
+        var response = Result<ParkingItem>.Success(
+            new ParkingItem(
+                data.Data.Id,
+                data.Data.Name,
+                $"{data.Data.Address.StreetName} {data.Data.Address.Number}, {data.Data.Address.PostalCode}",
+                data.Data.Capacity,
+                data.Data.PricePerHour,
+                data.Data.Status),
+            data.Message
+        );
+
+        return Ok(response);
     }
 
     [HttpPost]

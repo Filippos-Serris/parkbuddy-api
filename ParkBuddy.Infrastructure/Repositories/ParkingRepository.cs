@@ -47,6 +47,7 @@ public class ParkingRepository : IParkingRepository
                 p.PricePerHour,
                 p.Status)
             )
+            .AsNoTracking()
             .FirstOrDefaultAsync();
 
         if (result == null)
