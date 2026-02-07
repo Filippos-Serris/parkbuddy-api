@@ -19,9 +19,9 @@ public class UserController : ControllerBase
     /// Registers a new user based on the provided user details in the request body.
     /// </summary>
     /// <param name="user">The user details to register.</param>
-    /// <returns></returns>
+    /// <param name="cancellationToken">Cancellation token.</param>
     [HttpPost]
-    public async Task<IActionResult> RegisterUser([FromBody] RegisterUserRequest user)
+    public async Task<IActionResult> RegisterUser([FromBody] RegisterUserRequest user, CancellationToken cancellationToken)
     {
         var result = await _mediator.Send(
             new RegisterUserCommand(
@@ -29,7 +29,8 @@ public class UserController : ControllerBase
                 user.LastName,
                 user.Email,
                 user.Password,
-                user.Role));
+                user.Role),
+            cancellationToken);
 
         if (!result.IsSuccess)
             return NotFound();

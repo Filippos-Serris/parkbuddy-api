@@ -7,9 +7,9 @@ namespace ParkBuddy.Application.Interfaces;
 
 public interface IParkingRepository
 {
-    Task<Result<List<ParkingListDto>>> GetParkingListAsync();
-    Task<Result<ParkingDto>> GetParkingAsync(Guid parkingId);
-    Task<Result<Guid>> RegisterParkingAsync(RegisterParkingCommand parking);
-    Task<Result<bool>> DeleteParkingAsync(Guid parkingId);
-    Task<Result<ParkingDto>> UpdateParkingAsync(UpdateParkingCommand parking);
+    Task<Result<List<ParkingListDto>>> GetParkingListAsync(CancellationToken cancellationToken);
+    Task<Result<ParkingDto>> GetParkingAsync(Guid parkingId, CancellationToken cancellationToken);
+    Task<Result<Guid>> RegisterParkingAsync(RegisterParkingCommand parking, CancellationToken cancellationToken);
+    Task<Result<bool>> DeleteParkingAsync(Guid parkingId, CancellationToken cancellationToken);
+    Task<Result<ParkingDto>> UpdateParkingAsync(UpdateParkingCommand parking, CancellationToken cancellationToken);
 }

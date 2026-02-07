@@ -17,7 +17,7 @@ public class GetParkingHandler : IRequestHandler<GetParkingQuery, Result<Parking
 
     public async Task<Result<ParkingDto>> Handle(GetParkingQuery query, CancellationToken cancellationToken)
     {
-        var result = await _repository.GetParkingAsync(query.ParkingId);
+        var result = await _repository.GetParkingAsync(query.ParkingId, cancellationToken);
 
         if (result.IsSuccess)
             return Result<ParkingDto>.Success(result.Data, result.Message);

@@ -17,7 +17,7 @@ public class UpdateParkingHandler : IRequestHandler<UpdateParkingCommand, Result
 
     public async Task<Result<ParkingDto>> Handle(UpdateParkingCommand request, CancellationToken cancellationToken)
     {
-        var result = await _repository.UpdateParkingAsync(request);
+        var result = await _repository.UpdateParkingAsync(request, cancellationToken);
 
         if (!result.IsSuccess)
             return Result<ParkingDto>.Failure(result.Message);

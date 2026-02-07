@@ -19,7 +19,7 @@ public class AuthRepository : IAuthRepository
         _signInManager = signInManager;
     }
 
-    public async Task<Result<LoginDto>> LoginAsync(LoginCommand command)
+    public async Task<Result<LoginDto>> LoginAsync(LoginCommand command, CancellationToken cancellationToken)
     {
         var user = await _userManager.FindByEmailAsync(command.Email);
         if (user == null)

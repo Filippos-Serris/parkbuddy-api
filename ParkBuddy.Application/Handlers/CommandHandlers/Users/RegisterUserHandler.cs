@@ -15,7 +15,7 @@ public class RegisterUserHandler : IRequestHandler<RegisterUserCommand, Result<G
     }
     public async Task<Result<Guid>> Handle(RegisterUserCommand request, CancellationToken cancellationToken)
     {
-        var result = await _repository.RegisterUserAsync(request);
+        var result = await _repository.RegisterUserAsync(request, cancellationToken);
 
         if (!result.IsSuccess)
             return Result<Guid>.Failure(result.Message);

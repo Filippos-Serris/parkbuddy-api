@@ -19,7 +19,7 @@ public class LoginCommandHandler : IRequestHandler<LoginCommand, Result<LoginRes
 
     public async Task<Result<LoginResult>> Handle(LoginCommand request, CancellationToken cancellationToken)
     {
-        var login = await _repository.LoginAsync(request);
+        var login = await _repository.LoginAsync(request, cancellationToken);
 
         if (!login.IsSuccess)
             return Result<LoginResult>.Failure(login.Message);

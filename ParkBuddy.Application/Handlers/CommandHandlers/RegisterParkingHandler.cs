@@ -16,7 +16,7 @@ public class RegisterParkingHandler : IRequestHandler<RegisterParkingCommand, Re
 
     public async Task<Result<Guid>> Handle(RegisterParkingCommand request, CancellationToken cancellationToken)
     {
-        var result = await _repository.RegisterParkingAsync(request);
+        var result = await _repository.RegisterParkingAsync(request, cancellationToken);
 
         if (!result.IsSuccess)
             return Result<Guid>.Failure(result.Message);

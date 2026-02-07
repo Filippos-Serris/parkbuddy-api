@@ -19,12 +19,12 @@ public class AuthController : ControllerBase
     /// <summary>
     /// Authenticates a user based on the provided email and password, and returns a JWT token if successful.
     /// </summary>
-    /// <param name="request">The login request containing email and password.S</param>
-    /// <returns></returns>
+    /// <param name="request">The login request containing email and password.</param>
+    /// <param name="cancellationToken">Cancellation token.</param>
     [HttpPost]
-    public async Task<IActionResult> Login([FromBody] LoginRequest request)
+    public async Task<IActionResult> Login([FromBody] LoginRequest request, CancellationToken cancellationToken)
     {
-        var result = await _mediator.Send(new LoginCommand(request.Email, request.Password));
+        var result = await _mediator.Send(new LoginCommand(request.Email, request.Password), cancellationToken);
 
         if (result.IsSuccess)
             return Ok(result);

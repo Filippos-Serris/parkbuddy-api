@@ -24,12 +24,12 @@ public class ParkingController : ControllerBase
     /// <summary>
     /// Returns a list of available parkings.
     /// </summary>
-    /// <returns></returns>
+    /// <param name="cancellationToken">Cancellation token.</param>
     [HttpGet]
     [Authorize(Roles = "Customer,Admin")]
-    public async Task<IActionResult> GetParkings()
+    public async Task<IActionResult> GetParkings(CancellationToken cancellationToken)
     {
-        var data = await _mediator.Send(new GetParkingListQuery());
+        var data = await _mediator.Send(new GetParkingListQuery(), cancellationToken);
 
         if (!data.IsSuccess)
             return NotFound();
@@ -54,13 +54,13 @@ public class ParkingController : ControllerBase
     /// Get a specific parking based on the provided parkingId.
     /// </summary>
     /// <param name="parkingId">The id of the parking to retrieve.</param>
-    /// <returns></returns>
+    /// <param name="cancellationToken">Cancellation token.</param>
     [HttpGet]
     [Authorize(Roles = "Customer,Admin")]
     [Route("{parkingId}")]
-    public async Task<IActionResult> GetParking([FromRoute] Guid parkingId)
+    public async Task<IActionResult> GetParking([FromRoute] Guid parkingId, CancellationToken cancellationToken)
     {
-        var data = await _mediator.Send(new GetParkingQuery(parkingId));
+        var data = await _mediator.Send(new GetParkingQuery(parkingId), cancellationToken);
 
         if (!data.IsSuccess)
             return NotFound();
@@ -83,17 +83,17 @@ public class ParkingController : ControllerBase
     /// Register a new parking.
     /// </summary>
     /// <param name="request">The request containing the parking details.</param>
-    /// <returns></returns>
+    /// <param name="cancellationToken">Cancellation token.</param>
     [HttpPost]
     [Authorize(Roles = "Owner,Admin")]
-    public async Task<IActionResult> RegisterParking([FromBody] RegisterParkingRequest request)
+    public async Task<IActionResult> RegisterParking([FromBody] RegisterParkingRequest request, CancellationToken cancellationToken)
     {
         var result = await _mediator.Send(
             new RegisterParkingCommand(
                 request.Name,
                 new Domain.ValueObjects.Address(request.Address.StreetName, request.Address.Number, request.Address.PostalCode),
                 request.Capacity,
-                request.PricePerHour));
+                request.PricePerHour), cancellationToken);
 
         if (!result.IsSuccess)
             return NotFound();
@@ -103,14 +103,14 @@ public class ParkingController : ControllerBase
     /// <summary>
     /// Deletes a parking based on the provided parkingId.
     /// </summary>
-    /// <param name="parkingId">The id of the parking to delete</param>
-    /// <returns></returns>
+    /// <param name="parkingId">The id of the parking to delete.</param>
+    /// <param name="cancellationToken">Cancellation token.</param>
     [HttpDelete]
     [Authorize(Roles = "Owner,Admin")]
     [Route("{parkingId}")]
-    public async Task<IActionResult> DeleteParkingAsync([FromRoute] Guid parkingId)
+    public async Task<IActionResult> DeleteParkingAsync([FromRoute] Guid parkingId, CancellationToken cancellationToken)
     {
-        var result = await _mediator.Send(new DeleteParkingCommand(parkingId));
+        var result = await _mediator.Send(new DeleteParkingCommand(parkingId), cancellationToken);
 
         if (!result.IsSuccess)
             return NotFound(result.Message);
@@ -122,19 +122,21 @@ public class ParkingController : ControllerBase
     /// </summary>
     /// <param name="parkingId">The id of the parking to update.</param>
     /// <param name="parking">The updated parking details.</param>
-    /// <returns></returns>
+    /// <param name="cancellationToken">Cancellation token.</param>
     [HttpPut]
     [Authorize(Roles = "Owner,Admin")]
     [Route("{parkingId}")]
-    public async Task<IActionResult> UpdateParking([FromRoute] Guid parkingId, [FromBody] UpdateParkingRequest parking)
+    public async Task<IActionResult> UpdateParking([FromRoute] Guid parkingId, [FromBody] UpdateParkingRequest parking, CancellationToken cancellationToken)
     {
-        var result = await _mediator.Send(new UpdateParkingCommand(
-            parkingId,
-            parking.Name,
-            new Domain.ValueObjects.Address(parking.Address.StreetName, parking.Address.Number, parking.Address.PostalCode),
-            parking.Capacity,
-            parking.PricePerHour,
-            parking.Status));
+        var result = await _mediator.Send(
+            new UpdateParkingCommand(
+                parkingId,
+                parking.Name,
+                new Domain.ValueObjects.Address(parking.Address.StreetName, parking.Address.Number, parking.Address.PostalCode),
+                parking.Capacity,
+                parking.PricePerHour,
+                parking.Status),
+            cancellationToken);
 
         if (!result.IsSuccess)
             return NotFound(result.Message);

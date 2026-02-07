@@ -6,5 +6,5 @@ namespace ParkBuddy.Application.Interfaces;
 
 public interface IAuthRepository
 {
-    Task<Result<LoginDto>> LoginAsync(LoginCommand command);
+    Task<Result<LoginDto>> LoginAsync(LoginCommand command, CancellationToken cancellationToken);
 }

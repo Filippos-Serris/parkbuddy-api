@@ -17,7 +17,7 @@ public class ParkingRepository : IParkingRepository
         _context = context;
     }
 
-    public async Task<Result<List<ParkingListDto>>> GetParkingListAsync()
+    public async Task<Result<List<ParkingListDto>>> GetParkingListAsync(CancellationToken cancellationToken)
     {
         var parkings = await _context.Parkings
             .Select(p => new ParkingListDto(
@@ -35,7 +35,7 @@ public class ParkingRepository : IParkingRepository
         return Result<List<ParkingListDto>>.Success(parkings, "Parkings retrieved successfully");
     }
 
-    public async Task<Result<ParkingDto>> GetParkingAsync(Guid ParkingId)
+    public async Task<Result<ParkingDto>> GetParkingAsync(Guid ParkingId, CancellationToken cancellationToken)
     {
         var result = await _context.Parkings
             .Where(p => p.ParkingId == ParkingId)
@@ -55,7 +55,7 @@ public class ParkingRepository : IParkingRepository
         return Result<ParkingDto>.Success(result, "Parking retrieved successfully");
     }
 
-    public async Task<Result<Guid>> RegisterParkingAsync(RegisterParkingCommand command)
+    public async Task<Result<Guid>> RegisterParkingAsync(RegisterParkingCommand command, CancellationToken cancellationToken)
     {
 
         var newParking = new Parking
@@ -75,7 +75,7 @@ public class ParkingRepository : IParkingRepository
         return Result<Guid>.Failure("Failed to register command");
     }
 
-    public async Task<Result<bool>> DeleteParkingAsync(Guid parkingId)
+    public async Task<Result<bool>> DeleteParkingAsync(Guid parkingId, CancellationToken cancellationToken)
     {
         var result = await _context.Parkings.Where(p => p.ParkingId == parkingId).ExecuteDeleteAsync() > 0;
 
@@ -84,12 +84,12 @@ public class ParkingRepository : IParkingRepository
         return Result<bool>.Failure("Failed to delete p");
     }
 
-    public async Task<Result<ParkingDto>> UpdateParkingAsync(UpdateParkingCommand newParking)
+    public async Task<Result<ParkingDto>> UpdateParkingAsync(UpdateParkingCommand newParking, CancellationToken cancellationToken)
     {
         var parking = await _context.Parkings.FindAsync(newParking.Id);
 
         if (parking == null)
-            return Result<ParkingDto>.Failure("Parking not found, failed to delete.");
+            return Result<ParkingDto>.Failure("Parking not found, failed to update.");
 
         parking.Name = newParking.Name;
         parking.Address = newParking.Address;
@@ -101,15 +101,17 @@ public class ParkingRepository : IParkingRepository
 
         if (result)
         {
-            return Result<ParkingDto>.Success(new ParkingDto(
-                parking.ParkingId,
-                parking.Name,
-                parking.Address,
-                parking.Capacity,
-                parking.PricePerHour,
-                parking.Status)
-                , "Parking updated successfully");
+            return Result<ParkingDto>.Success(
+                new ParkingDto(
+                    parking.ParkingId,
+                    parking.Name,
+                    parking.Address,
+                    parking.Capacity,
+                    parking.PricePerHour,
+                    parking.Status),
+                "Parking updated successfully");
         }
+
         return Result<ParkingDto>.Failure("Failed to update parking");
     }
 }

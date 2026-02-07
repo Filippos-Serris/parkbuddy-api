@@ -5,5 +5,5 @@ namespace ParkBuddy.Application.Interfaces;
 
 public interface IUserRepository
 {
-    Task<Result<Guid>> RegisterUserAsync(RegisterUserCommand user);
+    Task<Result<Guid>> RegisterUserAsync(RegisterUserCommand user, CancellationToken cancellationToken);
 }

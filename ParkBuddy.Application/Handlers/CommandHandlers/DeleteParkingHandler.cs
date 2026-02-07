@@ -16,7 +16,7 @@ public class DeleteParkingHandler : IRequestHandler<DeleteParkingCommand, Result
 
     public async Task<Result<bool>> Handle(DeleteParkingCommand request, CancellationToken cancellationToken)
     {
-        var result = await _repository.DeleteParkingAsync(request.ParkingId);
+        var result = await _repository.DeleteParkingAsync(request.ParkingId, cancellationToken);
 
         if (!result.IsSuccess)
             return Result<bool>.Failure(result.Message);
