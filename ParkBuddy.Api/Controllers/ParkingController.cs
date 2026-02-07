@@ -10,13 +10,13 @@ using ParkBuddy.Contracts.Responses;
 namespace ParkBuddy.Api.Controllers;
 
 [ApiController]
-//[Authorize]
+[Authorize]
 [Route("api/[controller]/")]
-public class ParkingsController : ControllerBase
+public class ParkingController : ControllerBase
 {
     private readonly IMediator _mediator;
 
-    public ParkingsController(IMediator mediator)
+    public ParkingController(IMediator mediator)
     {
         _mediator = mediator;
     }
@@ -26,7 +26,7 @@ public class ParkingsController : ControllerBase
     /// </summary>
     /// <returns></returns>
     [HttpGet]
-    //[Authorize(Roles = "Customer,Admin")]
+    [Authorize(Roles = "Customer,Admin")]
     public async Task<IActionResult> GetParkings()
     {
         var data = await _mediator.Send(new GetParkingListQuery());
@@ -56,7 +56,7 @@ public class ParkingsController : ControllerBase
     /// <param name="parkingId"></param>
     /// <returns></returns>
     [HttpGet]
-    //[Authorize(Roles = "Customer,Admin")]
+    [Authorize(Roles = "Customer,Admin")]
     [Route("{parkingId}")]
     public async Task<IActionResult> GetParking(Guid parkingId)
     {
