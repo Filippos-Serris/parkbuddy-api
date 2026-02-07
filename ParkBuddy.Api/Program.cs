@@ -11,6 +11,7 @@ using ParkBuddy.Infrastructure.Repositories;
 using ParkBuddy.Infrastructure.Services;
 using System.Text;
 using System.Text.Json.Serialization;
+using System.Reflection;
 
 
 var builder = WebApplication.CreateBuilder(args);
@@ -61,7 +62,12 @@ builder.Services
     });
 builder.Services.AddOpenApi();
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
+builder.Services.AddSwaggerGen(options =>
+{
+    var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
+    var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
+    options.IncludeXmlComments(xmlPath);
+});
 builder.Services.AddCors();
 
 var app = builder.Build();

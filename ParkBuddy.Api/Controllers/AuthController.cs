@@ -16,6 +16,11 @@ public class AuthController : ControllerBase
         _mediator = mediator;
     }
 
+    /// <summary>
+    /// Authenticates a user based on the provided email and password, and returns a JWT token if successful.
+    /// </summary>
+    /// <param name="request">The login request containing email and password.S</param>
+    /// <returns></returns>
     [HttpPost]
     public async Task<IActionResult> Login([FromBody] LoginRequest request)
     {

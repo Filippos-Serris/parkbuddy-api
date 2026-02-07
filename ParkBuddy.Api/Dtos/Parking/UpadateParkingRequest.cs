@@ -3,7 +3,7 @@ using ParkBuddy.Domain.ValueObjects;
 
 namespace ParkBuddy.Api.Dtos.Parking;
 
-public record UpadateParkingRequest(
+public record UpdateParkingRequest(
     string Name,
     Address Address,
     int Capacity,

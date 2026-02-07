@@ -22,7 +22,7 @@ public class ParkingController : ControllerBase
     }
 
     /// <summary>
-    /// Get list of available parkings
+    /// Returns a list of available parkings.
     /// </summary>
     /// <returns></returns>
     [HttpGet]
@@ -51,14 +51,14 @@ public class ParkingController : ControllerBase
     }
 
     /// <summary>
-    /// Get a specific parking by providing a parkingId
+    /// Get a specific parking based on the provided parkingId.
     /// </summary>
-    /// <param name="parkingId"></param>
+    /// <param name="parkingId">The id of the parking to retrieve.</param>
     /// <returns></returns>
     [HttpGet]
     [Authorize(Roles = "Customer,Admin")]
     [Route("{parkingId}")]
-    public async Task<IActionResult> GetParking(Guid parkingId)
+    public async Task<IActionResult> GetParking([FromRoute] Guid parkingId)
     {
         var data = await _mediator.Send(new GetParkingQuery(parkingId));
 
@@ -79,6 +79,11 @@ public class ParkingController : ControllerBase
         return Ok(response);
     }
 
+    /// <summary>
+    /// Register a new parking.
+    /// </summary>
+    /// <param name="request">The request containing the parking details.</param>
+    /// <returns></returns>
     [HttpPost]
     [Authorize(Roles = "Owner,Admin")]
     public async Task<IActionResult> RegisterParking([FromBody] RegisterParkingRequest request)
@@ -95,10 +100,15 @@ public class ParkingController : ControllerBase
         return Ok(result);
     }
 
+    /// <summary>
+    /// Deletes a parking based on the provided parkingId.
+    /// </summary>
+    /// <param name="parkingId">The id of the parking to delete</param>
+    /// <returns></returns>
     [HttpDelete]
     [Authorize(Roles = "Owner,Admin")]
     [Route("{parkingId}")]
-    public async Task<IActionResult> DeleteParkingAsync(Guid parkingId)
+    public async Task<IActionResult> DeleteParkingAsync([FromRoute] Guid parkingId)
     {
         var result = await _mediator.Send(new DeleteParkingCommand(parkingId));
 
@@ -107,10 +117,16 @@ public class ParkingController : ControllerBase
         return Ok(result.Data);
     }
 
+    /// <summary>
+    /// Updates a parking based on the provided parkingId and parking details.
+    /// </summary>
+    /// <param name="parkingId">The id of the parking to update.</param>
+    /// <param name="parking">The updated parking details.</param>
+    /// <returns></returns>
     [HttpPut]
     [Authorize(Roles = "Owner,Admin")]
     [Route("{parkingId}")]
-    public async Task<IActionResult> UpdateParking(Guid parkingId, UpadateParkingRequest parking)
+    public async Task<IActionResult> UpdateParking([FromRoute] Guid parkingId, [FromBody] UpdateParkingRequest parking)
     {
         var result = await _mediator.Send(new UpdateParkingCommand(
             parkingId,

@@ -15,8 +15,13 @@ public class UserController : ControllerBase
         _mediator = mediator;
     }
 
+    /// <summary>
+    /// Registers a new user based on the provided user details in the request body.
+    /// </summary>
+    /// <param name="user">The user details to register.</param>
+    /// <returns></returns>
     [HttpPost]
-    public async Task<IActionResult> RegisterUser(RegisterUserRequest user)
+    public async Task<IActionResult> RegisterUser([FromBody] RegisterUserRequest user)
     {
         var result = await _mediator.Send(
             new RegisterUserCommand(
