@@ -4,12 +4,13 @@ using ParkBuddy.Contracts.Common;
 
 namespace ParkBuddy.Application.Queries.Parkings;
 
-public class GetParkingQuery : IRequest<Result<ParkingDto>>
+/// <summary>
+/// Represents a query to retrieve detailed information about a specific parking by its ID.
+/// </summary>
+public record GetParkingQuery(Guid ParkingId) : IRequest<Result<ParkingDto>>
 {
-    public Guid ParkingId { get; set; }
-
-    public GetParkingQuery(Guid parkingId)
-    {
-        ParkingId = parkingId;
-    }
+    /// <summary>
+    /// Gets or sets the parking ID for which to retrieve details.
+    /// </summary>
+    public Guid ParkingId { get; set; } = ParkingId;
 }

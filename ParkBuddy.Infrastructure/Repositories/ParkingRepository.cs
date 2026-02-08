@@ -28,7 +28,7 @@ public class ParkingRepository : IParkingRepository
                 p.Status
             ))
             .AsNoTracking()
-            .ToListAsync();
+            .ToListAsync(cancellationToken);
 
         if (parkings == null)
             return Result<List<ParkingListDto>>.Failure("Parkings not retrieved.");
@@ -48,7 +48,7 @@ public class ParkingRepository : IParkingRepository
                 p.Status)
             )
             .AsNoTracking()
-            .FirstOrDefaultAsync();
+            .FirstOrDefaultAsync(cancellationToken);
 
         if (result == null)
             return Result<ParkingDto>.Failure("Parking not retrieved.");
@@ -68,7 +68,7 @@ public class ParkingRepository : IParkingRepository
         };
 
         _context.Add(newParking);
-        var result = await _context.SaveChangesAsync() > 0;
+        var result = await _context.SaveChangesAsync(cancellationToken) > 0;
 
         if (result)
             return Result<Guid>.Success(newParking.ParkingId, "Parking registered successfully");
@@ -77,7 +77,7 @@ public class ParkingRepository : IParkingRepository
 
     public async Task<Result<bool>> DeleteParkingAsync(Guid parkingId, CancellationToken cancellationToken)
     {
-        var result = await _context.Parkings.Where(p => p.ParkingId == parkingId).ExecuteDeleteAsync() > 0;
+        var result = await _context.Parkings.Where(p => p.ParkingId == parkingId).ExecuteDeleteAsync(cancellationToken) > 0;
 
         if (result)
             return Result<bool>.Success(true, "Parking deleted successfully");
@@ -97,7 +97,7 @@ public class ParkingRepository : IParkingRepository
         parking.PricePerHour = newParking.PricePerHour;
         parking.Status = newParking.Status;
 
-        var result = await _context.SaveChangesAsync() > 0;
+        var result = await _context.SaveChangesAsync(cancellationToken) > 0;
 
         if (result)
         {

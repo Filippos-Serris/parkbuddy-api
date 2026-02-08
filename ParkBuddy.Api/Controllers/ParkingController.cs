@@ -9,6 +9,9 @@ using ParkBuddy.Contracts.Responses;
 
 namespace ParkBuddy.Api.Controllers;
 
+/// <summary>
+/// Controller responsible for handling parking-related operations.
+/// </summary>
 [ApiController]
 [Authorize]
 [Route("api/[controller]/")]
@@ -16,6 +19,10 @@ public class ParkingController : ControllerBase
 {
     private readonly IMediator _mediator;
 
+    /// <summary>
+    /// Initializes a new instance of the <see cref="ParkingController"/> class.
+    /// </summary>
+    /// <param name="mediator">Mediator.</param>
     public ParkingController(IMediator mediator)
     {
         _mediator = mediator;
@@ -93,7 +100,8 @@ public class ParkingController : ControllerBase
                 request.Name,
                 new Domain.ValueObjects.Address(request.Address.StreetName, request.Address.Number, request.Address.PostalCode),
                 request.Capacity,
-                request.PricePerHour), cancellationToken);
+                request.PricePerHour),
+            cancellationToken);
 
         if (!result.IsSuccess)
             return NotFound();

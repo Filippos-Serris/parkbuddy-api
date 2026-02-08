@@ -18,7 +18,7 @@ public class UserRepository : IUserRepository
         _userManager = userManager;
     }
 
-    public async Task<Result<Guid>> RegisterUserAsync(RegisterUserCommand user)
+    public async Task<Result<Guid>> RegisterUserAsync(RegisterUserCommand user, CancellationToken cancellationToken)
     {
         using var transaction = await _context.Database.BeginTransactionAsync();
 

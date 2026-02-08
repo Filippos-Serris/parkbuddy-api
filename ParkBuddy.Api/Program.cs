@@ -1,7 +1,9 @@
+using System.Reflection;
+using System.Text;
+using System.Text.Json.Serialization;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.AspNetCore.Cors.Infrastructure;
 using ParkBuddy.Application.Handlers.QueryHandlers;
 using ParkBuddy.Application.Interfaces;
 using ParkBuddy.Domain.Entities;
@@ -9,14 +11,10 @@ using ParkBuddy.Infrastructure.Data;
 using ParkBuddy.Infrastructure.Identity;
 using ParkBuddy.Infrastructure.Repositories;
 using ParkBuddy.Infrastructure.Services;
-using System.Text;
-using System.Text.Json.Serialization;
-using System.Reflection;
-
 
 var builder = WebApplication.CreateBuilder(args);
 
-//builder.Services.AddValidatorsFromAssemblyContaining<RegisterParkingDtoValidator>();
+// builder.Services.AddValidatorsFromAssemblyContaining<RegisterParkingDtoValidator>();
 builder.Services.AddMediatR(cnf => cnf.RegisterServicesFromAssembly(typeof(GetParkingListHandler).Assembly));
 builder.Services.AddIdentity<User, IdentityRole<Guid>>()
     .AddEntityFrameworkStores<ParkBuddyContext>()
@@ -49,7 +47,7 @@ builder.Services.AddAuthentication(options =>
         ValidateIssuerSigningKey = true,
         ValidIssuer = jwtSettings["Issuer"],
         ValidAudience = jwtSettings["Audience"],
-        IssuerSigningKey = new Microsoft.IdentityModel.Tokens.SymmetricSecurityKey(key)
+        IssuerSigningKey = new Microsoft.IdentityModel.Tokens.SymmetricSecurityKey(key),
     };
 });
 builder.Services.AddAuthorization();
@@ -75,7 +73,7 @@ var app = builder.Build();
 using (var scope = app.Services.CreateScope())
 {
     var db = scope.ServiceProvider.GetRequiredService<ParkBuddyContext>();
-    db.Database.Migrate(); // This applies any pending migrations and creates the database if it doesn't exist
+    await db.Database.MigrateAsync(); // This applies any pending migrations and creates the database if it doesn't exist
 }
 await IdentitySeeder.SeedRoles(app.Services);
 

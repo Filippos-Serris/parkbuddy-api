@@ -4,6 +4,7 @@ root = true
 # StyleCop
 dotnet_diagnostic.SA1200.severity = none
 dotnet_diagnostic.SA1101.severity = none
+dotnet_diagnostic.SA1633.severity = none
 
 # Meziantou Analyzer
 dotnet_diagnostic.MA0004.severity = none
