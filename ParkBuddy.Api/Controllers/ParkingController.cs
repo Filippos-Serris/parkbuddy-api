@@ -41,18 +41,15 @@ public class ParkingController : ControllerBase
         if (!data.IsSuccess)
             return NotFound();
 
-        var response = new GetParkingListResponse(
-            Result<List<ParkingListItem>>.Success(
-                data.Data.Select(p => new ParkingListItem(
+        var response = Result<GetParkingListResponse>.Success(
+            new GetParkingListResponse(data.Data.Select(p => new ParkingListItem(
                     p.Id,
                     p.Name,
                     $"{p.Address.StreetName} {p.Address.Number}, {p.Address.PostalCode}",
                     p.PricePerHour,
                     p.Status.ToString()
-                )).ToList(),
-                data.Message
-            )
-        );
+                )).ToList()),
+            data.Message);
 
         return Ok(response);
     }
@@ -80,8 +77,7 @@ public class ParkingController : ControllerBase
                 data.Data.Capacity,
                 data.Data.PricePerHour,
                 data.Data.Status),
-            data.Message
-        );
+            data.Message);
 
         return Ok(response);
     }

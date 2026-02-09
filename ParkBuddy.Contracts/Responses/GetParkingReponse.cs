@@ -1,9 +1,8 @@
-using ParkBuddy.Contracts.Common;
 using ParkBuddy.Contracts.Enums;
 
 namespace ParkBuddy.Contracts.Responses
 {
-    public record GetParkingResponse(Result<ParkingItem> Result);
+    public record GetParkingResponse(ParkingItem Parking);
 
     public record ParkingItem(
         Guid Id,
