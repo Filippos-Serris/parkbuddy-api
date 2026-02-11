@@ -1,3 +1,4 @@
+using System.Security.Claims;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -91,8 +92,11 @@ public class ParkingController : ControllerBase
     [Authorize(Roles = "Owner,Admin")]
     public async Task<IActionResult> RegisterParking([FromBody] RegisterParkingRequest request, CancellationToken cancellationToken)
     {
+        var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+
         var result = await _mediator.Send(
             new RegisterParkingCommand(
+                Guid.Parse(userId),
                 request.Name,
                 new Domain.ValueObjects.Address(request.Address.StreetName, request.Address.Number, request.Address.PostalCode),
                 request.Capacity,
