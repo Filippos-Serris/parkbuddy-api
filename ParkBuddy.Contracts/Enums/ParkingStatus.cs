@@ -1,9 +1,8 @@
-namespace ParkBuddy.Contracts.Enums
+namespace ParkBuddy.Contracts.Enums;
+
+public enum ParkingStatus
 {
-    public enum ParkingStatus
-    {
-        Open,
-        Closed,
-        Full
-    }
+    Open,
+    Closed,
+    Full
 }

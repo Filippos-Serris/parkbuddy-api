@@ -6,39 +6,53 @@ using ParkBuddy.Contracts.Common;
 using ParkBuddy.Contracts.Enums;
 using ParkBuddy.Domain.Entities;
 
-namespace ParkBuddy.Infrastructure.Repositories
+namespace ParkBuddy.Infrastructure.Repositories;
+
+/// <summary>
+/// Repository responsible for handling authentication-related operations.
+/// </summary>
+public class AuthRepository : IAuthRepository
 {
-    public class AuthRepository : IAuthRepository
+    private readonly UserManager<User> _userManager;
+    private readonly SignInManager<User> _signInManager;
+
+    /// <summary>
+    /// Initializes a new instance of the <see cref="AuthRepository"/> class.
+    /// </summary>
+    /// <param name="userManager">UserManager.</param>
+    /// <param name="signInManager">SignInManager.</param>
+    public AuthRepository(UserManager<User> userManager, SignInManager<User> signInManager)
     {
-        private readonly UserManager<User> userManager;
-        private readonly SignInManager<User> signInManager;
+        _userManager = userManager;
+        _signInManager = signInManager;
+    }
 
-        public AuthRepository(UserManager<User> userManager, SignInManager<User> signInManager)
+    /// <summary>
+    /// Authenticates a user based on the provided email and password, and returns a JWT token if successful.
+    /// </summary>
+    /// <param name="command">Log in information.</param>
+    /// <param name="cancellationToken">CancellationToken.</param>
+    /// <returns>Result of the login operation.</returns>
+    public async Task<Result<LoginDto>> LoginAsync(LoginCommand command, CancellationToken cancellationToken)
+    {
+        var user = await _userManager.FindByEmailAsync(command.Email);
+        if (user == null)
         {
-            this.userManager = userManager;
-            this.signInManager = signInManager;
+            return Result<LoginDto>.Failure("No user found with this email");
         }
 
-        public async Task<Result<LoginDto>> LoginAsync(LoginCommand command)
+        var result = await _signInManager.CheckPasswordSignInAsync(user, command.Password, false);
+        if (!result.Succeeded)
         {
-            var user = await userManager.FindByEmailAsync(command.Email);
-            if (user == null)
-            {
-                return Result<LoginDto>.Failure("No user found with this email");
-            }
-
-            var result = await signInManager.CheckPasswordSignInAsync(user, command.Password, false);
-            if (!result.Succeeded)
-            {
-                return Result<LoginDto>.Failure("Invalid password");
-            }
-
-            var role = (await userManager.GetRolesAsync(user)).FirstOrDefault();
-            if (!Enum.TryParse<Roles>(role, true, out var roleEnum))
-                throw new InvalidOperationException($"Role '{role}' is not defined in Roles enum.");
-
-            return Result<LoginDto>.Success(new LoginDto(
-                user.Id, roleEnum), "User loged in");
+            return Result<LoginDto>.Failure("Invalid password");
         }
+
+        var role = (await _userManager.GetRolesAsync(user)).FirstOrDefault();
+        if (!Enum.TryParse<Roles>(role, true, out var roleEnum))
+        {
+            throw new InvalidOperationException($"Role '{role}' is not defined in Roles enum.");
+        }
+
+        return Result<LoginDto>.Success(new LoginDto(user.Id, roleEnum), "User logged in successfully");
     }
 }
