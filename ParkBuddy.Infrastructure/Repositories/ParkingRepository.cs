@@ -58,6 +58,7 @@ public class ParkingRepository : IParkingRepository
         var newParking = new Parking
         {
             ParkingId = Guid.NewGuid(),
+            UserId = command.UserId,
             Name = command.Name,
             Address = command.Address,
             Capacity = command.Capacity,

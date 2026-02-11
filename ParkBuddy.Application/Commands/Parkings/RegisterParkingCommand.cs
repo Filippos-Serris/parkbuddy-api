@@ -7,11 +7,13 @@ namespace ParkBuddy.Application.Commands.Parkings;
 /// <summary>
 /// Represents a command to register a new parking with the specified details.
 /// </summary>
+/// <param name="UserId">Parking owners id.</param>
 /// <param name="Name">Parking name.</param>
 /// <param name="Address">Address of parking.</param>
 /// <param name="Capacity">Vehicle capacity.</param>
 /// <param name="PricePerHour">Price per hour.</param>
 public record RegisterParkingCommand(
+    Guid UserId,
     string Name,
     Address Address,
     int Capacity,
