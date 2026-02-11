@@ -9,7 +9,7 @@ public interface IParkingRepository
 {
     Task<Result<List<ParkingListDto>>> GetParkingListAsync(CancellationToken cancellationToken);
     Task<Result<ParkingDto>> GetParkingAsync(Guid parkingId, CancellationToken cancellationToken);
-    Task<Result<Guid>> RegisterParkingAsync(RegisterParkingCommand parking, CancellationToken cancellationToken);
+    Task<Result<Guid>> RegisterParkingAsync(RegisterParkingCommand command, CancellationToken cancellationToken);
     Task<Result<bool>> DeleteParkingAsync(Guid parkingId, CancellationToken cancellationToken);
-    Task<Result<ParkingDto>> UpdateParkingAsync(UpdateParkingCommand parking, CancellationToken cancellationToken);
+    Task<Result<ParkingDto>> UpdateParkingAsync(UpdateParkingCommand command, CancellationToken cancellationToken);
 }

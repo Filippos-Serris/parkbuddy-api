@@ -42,7 +42,8 @@ public class UserController : ControllerBase
             cancellationToken);
 
         if (!result.IsSuccess)
-            return NotFound();
-        return Created();
+            return BadRequest(result);
+
+        return Ok(result);
     }
 }

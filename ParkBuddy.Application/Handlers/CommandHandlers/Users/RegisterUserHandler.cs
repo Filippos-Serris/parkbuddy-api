@@ -10,13 +10,13 @@ namespace ParkBuddy.Application.Handlers.CommandHandlers.Users;
 /// </summary>
 public class RegisterUserHandler : IRequestHandler<RegisterUserCommand, Result<Guid>>
 {
-    private readonly IUserRepository _repository;
+    private readonly IUserAccountService _repository;
 
     /// <summary>
     /// Initializes a new instance of the <see cref="RegisterUserHandler"/> class.
     /// </summary>
     /// <param name="repository">The user repository to use for handling the command.</param>
-    public RegisterUserHandler(IUserRepository repository)
+    public RegisterUserHandler(IUserAccountService repository)
     {
         _repository = repository;
     }
@@ -32,7 +32,7 @@ public class RegisterUserHandler : IRequestHandler<RegisterUserCommand, Result<G
         var result = await _repository.RegisterUserAsync(request, cancellationToken);
 
         if (!result.IsSuccess)
-            return Result<Guid>.Failure(result.Message);
+            return Result<Guid>.Failure(result.Message, result.Errors);
         return Result<Guid>.Success(result.Data, result.Message);
     }
 }

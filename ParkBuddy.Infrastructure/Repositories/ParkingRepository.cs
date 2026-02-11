@@ -20,51 +20,48 @@ public class ParkingRepository : IParkingRepository
     public async Task<Result<List<ParkingListDto>>> GetParkingListAsync(CancellationToken cancellationToken)
     {
         var parkings = await _context.Parkings
+        .AsNoTracking()
             .Select(p => new ParkingListDto(
                 p.ParkingId,
                 p.Name,
                 p.Address,
                 p.PricePerHour,
-                p.Status
-            ))
-            .AsNoTracking()
+                p.Status))
             .ToListAsync(cancellationToken);
 
-        if (parkings == null)
-            return Result<List<ParkingListDto>>.Failure("Parkings not retrieved.");
-        return Result<List<ParkingListDto>>.Success(parkings, "Parkings retrieved successfully");
+        return Result<List<ParkingListDto>>.Success(
+            parkings,
+            parkings.Count != 0 ? "Parkings retrieved successfully" : "No parkings found");
     }
 
-    public async Task<Result<ParkingDto>> GetParkingAsync(Guid ParkingId, CancellationToken cancellationToken)
+    public async Task<Result<ParkingDto>> GetParkingAsync(Guid parkingId, CancellationToken cancellationToken)
     {
         var result = await _context.Parkings
-            .Where(p => p.ParkingId == ParkingId)
+        .AsNoTracking()
+            .Where(p => p.ParkingId == parkingId)
             .Select(p => new ParkingDto(
                 p.ParkingId,
                 p.Name,
                 p.Address,
                 p.Capacity,
                 p.PricePerHour,
-                p.Status)
-            )
-            .AsNoTracking()
-            .FirstOrDefaultAsync(cancellationToken);
+                p.Status))
+            .SingleOrDefaultAsync(cancellationToken);
 
         if (result == null)
-            return Result<ParkingDto>.Failure("Parking not retrieved.");
+            return Result<ParkingDto>.Failure($"Parking with {parkingId} id not found");
         return Result<ParkingDto>.Success(result, "Parking retrieved successfully");
     }
 
     public async Task<Result<Guid>> RegisterParkingAsync(RegisterParkingCommand command, CancellationToken cancellationToken)
     {
-
         var newParking = new Parking
         {
             ParkingId = Guid.NewGuid(),
             Name = command.Name,
             Address = command.Address,
             Capacity = command.Capacity,
-            PricePerHour = command.PricePerHour
+            PricePerHour = command.PricePerHour,
         };
 
         _context.Add(newParking);
@@ -72,7 +69,7 @@ public class ParkingRepository : IParkingRepository
 
         if (result)
             return Result<Guid>.Success(newParking.ParkingId, "Parking registered successfully");
-        return Result<Guid>.Failure("Failed to register command");
+        return Result<Guid>.Failure("Failed to register parking");
     }
 
     public async Task<Result<bool>> DeleteParkingAsync(Guid parkingId, CancellationToken cancellationToken)
@@ -84,18 +81,18 @@ public class ParkingRepository : IParkingRepository
         return Result<bool>.Failure("Failed to delete p");
     }
 
-    public async Task<Result<ParkingDto>> UpdateParkingAsync(UpdateParkingCommand newParking, CancellationToken cancellationToken)
+    public async Task<Result<ParkingDto>> UpdateParkingAsync(UpdateParkingCommand command, CancellationToken cancellationToken)
     {
-        var parking = await _context.Parkings.FindAsync(newParking.Id);
+        var parking = await _context.Parkings.FindAsync(command.Id);
 
         if (parking == null)
             return Result<ParkingDto>.Failure("Parking not found, failed to update.");
 
-        parking.Name = newParking.Name;
-        parking.Address = newParking.Address;
-        parking.Capacity = newParking.Capacity;
-        parking.PricePerHour = newParking.PricePerHour;
-        parking.Status = newParking.Status;
+        parking.Name = command.Name;
+        parking.Address = command.Address;
+        parking.Capacity = command.Capacity;
+        parking.PricePerHour = command.PricePerHour;
+        parking.Status = command.Status;
 
         var result = await _context.SaveChangesAsync(cancellationToken) > 0;
 

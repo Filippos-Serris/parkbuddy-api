@@ -8,7 +8,7 @@ using ParkBuddy.Infrastructure.Data;
 namespace ParkBuddy.Infrastructure.Identity;
 
 /// <summary>
-/// Repository for managing user-related operations. 
+/// Repository for managing user-related operations.
 /// </summary>
 public class UserAccountService : IUserAccountService
 {

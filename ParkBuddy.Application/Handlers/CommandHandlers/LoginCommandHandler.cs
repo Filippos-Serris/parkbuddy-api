@@ -6,11 +6,19 @@ using ParkBuddy.Contracts.Common;
 
 namespace ParkBuddy.Application.Handlers.CommandHandlers;
 
+/// <summary>
+/// Handler for processing the <see cref="LoginCommand"/>.
+/// </summary>
 public class LoginCommandHandler : IRequestHandler<LoginCommand, Result<LoginResult>>
 {
     private readonly IAuthRepository _repository;
     private readonly IJwtTokenService _tokenService;
 
+    /// <summary>
+    /// Initializes a new instance of the <see cref="LoginCommandHandler"/> class.
+    /// </summary>
+    /// <param name="repository">The authentication repository to use for handling the login command.</param>
+    /// <param name="tokenService">The JWT token service to use for generating tokens.</param>
     public LoginCommandHandler(IAuthRepository repository, IJwtTokenService tokenService)
     {
         _repository = repository;
