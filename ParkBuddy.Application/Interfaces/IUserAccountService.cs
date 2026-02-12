@@ -21,4 +21,11 @@ public interface IUserAccountService
     /// <param name="command">The command containing user update details.</param>
     /// <param name="cancellationToken">The cancellation token.</param>
     Task<Result<bool>> UpdateUserAsync(UpdateUserCommand command, CancellationToken cancellationToken);
+
+    /// <summary>
+    /// Updates an existing user's password based on the provided update password command.
+    /// </summary>
+    /// <param name="command">The command containing user password update details.</param>
+    /// <param name="cancellationToken">The cancellation token.</param>
+    Task<Result<bool>> UpdateUserPasswordAsync(UpdateUserPasswordCommand command, CancellationToken cancellationToken);
 }

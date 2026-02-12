@@ -1,4 +1,5 @@
-﻿using MediatR;
+﻿using System.Security.Claims;
+using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using ParkBuddy.Application.Commands.Users;
@@ -59,12 +60,47 @@ public class UserController : ControllerBase
         [FromBody] UpdateUserRequest request,
         CancellationToken cancellationToken)
     {
+        var claimUserId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+
+        if (claimUserId != userId)
+            return Unauthorized();
+
         var result = await _mediator.Send(
             new UpdateUserCommand(
                 new Guid(userId),
                 request.FirstName,
                 request.LastName,
                 request.Email),
+            cancellationToken);
+
+        if (!result.IsSuccess)
+            return BadRequest(result);
+        return Ok(result);
+    }
+
+    /// <summary>
+    /// Updates the password of a user.
+    /// </summary>
+    /// <param name="userId">The unique identifier of the user whose password is to be updated.</param>
+    /// <param name="request">The request containing the current and new password details.</param>
+    /// <param name="cancellationToken">Cancellation token.</param>
+    [HttpPatch("{userId}/password")]
+    [Authorize]
+    public async Task<IActionResult> UpdateUserPassword(
+        [FromRoute] string userId,
+        [FromBody] UpdateUserPasswordRequest request,
+        CancellationToken cancellationToken)
+    {
+        var claimUserId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+
+        if (claimUserId != userId)
+            return Unauthorized();
+
+        var result = await _mediator.Send(
+            new UpdateUserPasswordCommand(
+                new Guid(userId),
+                request.CurrentPassword,
+                request.NewPassword),
             cancellationToken);
 
         if (!result.IsSuccess)

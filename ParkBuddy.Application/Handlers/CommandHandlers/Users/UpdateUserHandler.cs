@@ -21,9 +21,14 @@ namespace ParkBuddy.Application.Handlers.CommandHandlers.Users
             _userAccountService = userAccountService;
         }
 
-        public async Task<Result<bool>> Handle(UpdateUserCommand request, CancellationToken cancellationToken)
+        /// <summary>
+        /// Handles the user update command.
+        /// </summary>
+        /// <param name="command">The update user command request.</param>
+        /// <param name="cancellationToken">Cancellation token.</param>
+        public async Task<Result<bool>> Handle(UpdateUserCommand command, CancellationToken cancellationToken)
         {
-            var result = await _userAccountService.UpdateUserAsync(request, cancellationToken);
+            var result = await _userAccountService.UpdateUserAsync(command, cancellationToken);
 
             if (!result.IsSuccess)
                 return Result<bool>.Failure(result.Message, result.Errors);

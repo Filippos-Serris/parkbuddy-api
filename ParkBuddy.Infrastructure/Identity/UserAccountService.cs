@@ -97,4 +97,29 @@ public class UserAccountService : IUserAccountService
 
         return Result<bool>.Success(true, "User updated successfully");
     }
+
+    /// <summary>
+    /// Updates an existing user's password based on the provided update password command.
+    /// </summary>
+    /// <param name="command">The command containing user password update details.</param>
+    /// <param name="cancellationToken">The cancellation token to monitor for cancellation requests.</param>
+    public async Task<Result<bool>> UpdateUserPasswordAsync(UpdateUserPasswordCommand command, CancellationToken cancellationToken)
+    {
+        var user = await _userManager.FindByIdAsync(command.UserId.ToString());
+
+        if (user == null)
+            return Result<bool>.Failure("User not found");
+
+        var passwordResult = await _userManager.ChangePasswordAsync(
+            user,
+            command.CurrentPassword,
+            command.NewPassword);
+
+        if (!passwordResult.Succeeded)
+        {
+            return Result<bool>.Failure("Password update failed", passwordResult.Errors.Select(e => e.Description).ToList());
+        }
+
+        return Result<bool>.Success(true, "Password updated successfully");
+    }
 }
