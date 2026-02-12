@@ -10,6 +10,7 @@ dotnet_diagnostic.SA1623.severity = none
 dotnet_diagnostic.SA1111.severity = none
 dotnet_diagnostic.SA1009.severity = none
 dotnet_diagnostic.SA1413.severity = none
+dotnet_diagnostic.SA1615.severity = none
 
 # Meziantou Analyzer
 dotnet_diagnostic.MA0004.severity = none
