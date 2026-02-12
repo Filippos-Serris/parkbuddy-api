@@ -1,4 +1,5 @@
 ﻿using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using ParkBuddy.Application.Commands.Users;
 using ParkBuddy.Contracts.Requests;
@@ -28,7 +29,6 @@ public class UserController : ControllerBase
     /// </summary>
     /// <param name="user">The user details to register.</param>
     /// <param name="cancellationToken">Cancellation token.</param>
-    /// <returns>A <see cref="Task"/> An HTTP response indicating the result of the registration operation.</returns>
     [HttpPost]
     public async Task<IActionResult> RegisterUser([FromBody] RegisterUserRequest user, CancellationToken cancellationToken)
     {
@@ -43,7 +43,32 @@ public class UserController : ControllerBase
 
         if (!result.IsSuccess)
             return BadRequest(result);
+        return Ok(result);
+    }
 
+    /// <summary>
+    /// Updates user's details.
+    /// </summary>
+    /// <param name="userId">The unique identifier of the user to update.</param>
+    /// <param name="request">The request containing updated user details.</param>
+    /// <param name="cancellationToken">Cancellation token.</param>
+    [HttpPatch("{userId}")]
+    [Authorize]
+    public async Task<IActionResult> UpdateUser(
+        [FromRoute] string userId,
+        [FromBody] UpdateUserRequest request,
+        CancellationToken cancellationToken)
+    {
+        var result = await _mediator.Send(
+            new UpdateUserCommand(
+                new Guid(userId),
+                request.FirstName,
+                request.LastName,
+                request.Email),
+            cancellationToken);
+
+        if (!result.IsSuccess)
+            return BadRequest(result);
         return Ok(result);
     }
 }
