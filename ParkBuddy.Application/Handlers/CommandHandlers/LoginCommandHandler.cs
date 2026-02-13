@@ -11,23 +11,23 @@ namespace ParkBuddy.Application.Handlers.CommandHandlers;
 /// </summary>
 public class LoginCommandHandler : IRequestHandler<LoginCommand, Result<LoginResult>>
 {
-    private readonly IAuthService _repository;
+    private readonly IAuthService _service;
     private readonly IJwtTokenService _tokenService;
 
     /// <summary>
     /// Initializes a new instance of the <see cref="LoginCommandHandler"/> class.
     /// </summary>
-    /// <param name="repository">The authentication repository to use for handling the login command.</param>
+    /// <param name="service">The authentication repository to use for handling the login command.</param>
     /// <param name="tokenService">The JWT token service to use for generating tokens.</param>
-    public LoginCommandHandler(IAuthService repository, IJwtTokenService tokenService)
+    public LoginCommandHandler(IAuthService service, IJwtTokenService tokenService)
     {
-        _repository = repository;
+        _service = service;
         _tokenService = tokenService;
     }
 
     public async Task<Result<LoginResult>> Handle(LoginCommand command, CancellationToken cancellationToken)
     {
-        var login = await _repository.LoginAsync(command, cancellationToken);
+        var login = await _service.LoginAsync(command, cancellationToken);
 
         if (!login.IsSuccess)
             return Result<LoginResult>.Failure(login.Message);
