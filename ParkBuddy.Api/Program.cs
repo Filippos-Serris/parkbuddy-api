@@ -28,7 +28,7 @@ builder.Services.AddDbContext<ParkBuddyContext>(options =>
     options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
 builder.Services.AddScoped<IParkingRepository, ParkingRepository>();
 builder.Services.AddScoped<IUserAccountService, UserAccountService>();
-builder.Services.AddScoped<IAuthRepository, AuthRepository>();
+builder.Services.AddScoped<IAuthService, AuthService>();
 
 // JWT configuration
 var jwtSettings = builder.Configuration.GetSection("JwtSettings");

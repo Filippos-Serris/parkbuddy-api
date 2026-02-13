@@ -29,7 +29,7 @@ public class AuthController : ControllerBase
     /// <param name="request">The login request containing email and password.</param>
     /// <param name="cancellationToken">Cancellation token.</param>
     /// <returns>An <see cref="IActionResult"/> Containing the login result.</returns>
-    [HttpPost]
+    [HttpPost("login")]
     public async Task<IActionResult> Login([FromBody] LoginRequest request, CancellationToken cancellationToken)
     {
         var result = await _mediator.Send(new LoginCommand(request.Email, request.Password), cancellationToken);
@@ -37,5 +37,15 @@ public class AuthController : ControllerBase
         if (result.IsSuccess)
             return Ok(result);
         return Unauthorized(result);
+    }
+
+    [HttpPost("logout")]
+    public async Task<IActionResult> Logout(CancellationToken cancellationToken)
+    {
+        var result = await _mediator.Send(new LogoutCommand(), cancellationToken);
+
+        if (result.IsSuccess)
+            return Ok(result);
+        return BadRequest(result);
     }
 }
