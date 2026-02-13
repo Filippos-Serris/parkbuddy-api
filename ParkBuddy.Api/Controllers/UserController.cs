@@ -60,10 +60,10 @@ public class UserController : ControllerBase
         [FromBody] UpdateUserRequest request,
         CancellationToken cancellationToken)
     {
-        var claimUserId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+        var claimUserId = User.FindFirst(ClaimTypes.NameIdentifier).Value;
 
-        if (claimUserId != userId)
-            return Unauthorized();
+        if (claimUserId != userId && !User.IsInRole("Admin"))
+            return Forbid();
 
         var result = await _mediator.Send(
             new UpdateUserCommand(
@@ -93,14 +93,34 @@ public class UserController : ControllerBase
     {
         var claimUserId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
 
-        if (claimUserId != userId)
-            return Unauthorized();
+        if (claimUserId != userId && !User.IsInRole("Admin"))
+            return Forbid();
 
         var result = await _mediator.Send(
             new UpdateUserPasswordCommand(
                 new Guid(userId),
                 request.CurrentPassword,
                 request.NewPassword),
+            cancellationToken);
+
+        if (!result.IsSuccess)
+            return BadRequest(result);
+        return Ok(result);
+    }
+
+    [HttpDelete("{userId}")]
+    [Authorize]
+    public async Task<IActionResult> DeleteUser(
+        [FromRoute] string userId,
+        CancellationToken cancellationToken)
+    {
+        var claimUserId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+
+        if (claimUserId != userId && !User.IsInRole("Admin"))
+            return Forbid();
+
+        var result = await _mediator.Send(
+            new DeleteUserCommand(new Guid(userId)),
             cancellationToken);
 
         if (!result.IsSuccess)

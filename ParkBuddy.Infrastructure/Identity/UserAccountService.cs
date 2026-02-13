@@ -122,4 +122,18 @@ public class UserAccountService : IUserAccountService
 
         return Result<bool>.Success(true, "Password updated successfully");
     }
+
+    public async Task<Result<bool>> DeleteUserAsync(DeleteUserCommand command, CancellationToken cancellationToken)
+    {
+        var user = await _userManager.FindByIdAsync(command.UserId.ToString());
+
+        if (user == null)
+            return Result<bool>.Failure("User not found");
+
+        var result = await _userManager.DeleteAsync(user);
+        if (!result.Succeeded)
+            return Result<bool>.Failure("User deletion failed", result.Errors.Select(e => e.Description).ToList());
+
+        return Result<bool>.Success(true, "User deleted successfully");
+    }
 }
