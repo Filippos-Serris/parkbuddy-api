@@ -1,27 +1,26 @@
 ﻿using MediatR;
-using ParkBuddy.Application.Commands;
+using ParkBuddy.Application.Commands.Parkings;
+using ParkBuddy.Application.Dtos.Parkings;
 using ParkBuddy.Application.Interfaces;
-using ParkBuddy.Contracts;
-using ParkBuddy.Contracts.Dtos;
+using ParkBuddy.Contracts.Common;
 
-namespace ParkBuddy.Application.Handlers.CommandHandlers
+namespace ParkBuddy.Application.Handlers.CommandHandlers;
+
+public class UpdateParkingHandler : IRequestHandler<UpdateParkingCommand, Result<ParkingDto>>
 {
-    public class UpdateParkingHandler : IRequestHandler<UpdateParkingCommand, Result<ParkingDto>>
+    private readonly IParkingRepository _repository;
+
+    public UpdateParkingHandler(IParkingRepository repository)
     {
-        private readonly IParkingRepository repository;
+        _repository = repository;
+    }
 
-        public UpdateParkingHandler(IParkingRepository repository)
-        {
-            this.repository = repository;
-        }
+    public async Task<Result<ParkingDto>> Handle(UpdateParkingCommand request, CancellationToken cancellationToken)
+    {
+        var result = await _repository.UpdateParkingAsync(request, cancellationToken);
 
-        public async Task<Result<ParkingDto>> Handle(UpdateParkingCommand request, CancellationToken cancellationToken)
-        {
-            var result = await repository.UpdateParkingAsync(request.ParkingDto);
-
-            if (!result.IsSuccess)
-                return Result<ParkingDto>.Failure(result.Message);
-            return Result<ParkingDto>.Success(result.Data, result.Message);
-        }
+        if (!result.IsSuccess)
+            return Result<ParkingDto>.Failure(result.Message);
+        return Result<ParkingDto>.Success(result.Data, result.Message);
     }
 }

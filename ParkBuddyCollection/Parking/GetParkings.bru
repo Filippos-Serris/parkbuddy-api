@@ -1,0 +1,15 @@
+meta {
+  name: GetParkings
+  type: http
+  seq: 2
+}
+
+get {
+  url: http://localhost:5204/api/Parking
+  body: none
+  auth: bearer
+}
+
+auth:bearer {
+  token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI5NzU3ZWNlNi1mYjUxLTQyMWUtYjgzZC02ZmUwNzcyOWQ3NDIiLCJ1bmlxdWVfbmFtZSI6Im93bmVyQGV4YW1wbGUuY29tIiwiZW1haWwiOiJvd25lckBleGFtcGxlLmNvbSIsImh0dHA6Ly9zY2hlbWFzLm1pY3Jvc29mdC5jb20vd3MvMjAwOC8wNi9pZGVudGl0eS9jbGFpbXMvcm9sZSI6Ik93bmVyIiwiZXhwIjoxNzcwOTgyNzgzLCJpc3MiOiJNeUFwaSIsImF1ZCI6Ik15QXBpVXNlcnMifQ.S0-RUUyzBhnvwqRbPT9HKqNAR9zuH6fq6YkhGDWyd2U
+}

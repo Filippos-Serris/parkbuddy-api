@@ -1,118 +1,115 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using ParkBuddy.Application.Commands.Parkings;
+using ParkBuddy.Application.Dtos.Parkings;
 using ParkBuddy.Application.Interfaces;
-using ParkBuddy.Contracts;
-using ParkBuddy.Contracts.Dtos;
-using ParkBuddy.Contracts.Enums;
+using ParkBuddy.Contracts.Common;
 using ParkBuddy.Domain.Entities;
 using ParkBuddy.Infrastructure.Data;
 
-namespace ParkBuddy.Infrastructure.Repositories
+namespace ParkBuddy.Infrastructure.Repositories;
+
+public class ParkingRepository : IParkingRepository
 {
-    public class ParkingRepository : IParkingRepository
+    private readonly ParkBuddyContext _context;
+
+    public ParkingRepository(ParkBuddyContext context)
     {
-        private readonly ParkBuddyContext context;
+        _context = context;
+    }
 
-        public ParkingRepository(ParkBuddyContext context)
+    public async Task<Result<List<ParkingListDto>>> GetParkingListAsync(CancellationToken cancellationToken)
+    {
+        var parkings = await _context.Parkings
+        .AsNoTracking()
+            .Select(p => new ParkingListDto(
+                p.ParkingId,
+                p.Name,
+                p.Address,
+                p.PricePerHour,
+                p.Status))
+            .ToListAsync(cancellationToken);
+
+        return Result<List<ParkingListDto>>.Success(
+            parkings,
+            parkings.Count != 0 ? "Parkings retrieved successfully" : "No parkings found");
+    }
+
+    public async Task<Result<ParkingDto>> GetParkingAsync(Guid parkingId, CancellationToken cancellationToken)
+    {
+        var result = await _context.Parkings
+        .AsNoTracking()
+            .Where(p => p.ParkingId == parkingId)
+            .Select(p => new ParkingDto(
+                p.ParkingId,
+                p.Name,
+                p.Address,
+                p.Capacity,
+                p.PricePerHour,
+                p.Status))
+            .SingleOrDefaultAsync(cancellationToken);
+
+        if (result == null)
+            return Result<ParkingDto>.Failure($"Parking with {parkingId} id not found");
+        return Result<ParkingDto>.Success(result, "Parking retrieved successfully");
+    }
+
+    public async Task<Result<Guid>> RegisterParkingAsync(RegisterParkingCommand command, CancellationToken cancellationToken)
+    {
+        var newParking = new Parking
         {
-            this.context = context;
+            ParkingId = Guid.NewGuid(),
+            UserId = command.UserId,
+            Name = command.Name,
+            Address = command.Address,
+            Capacity = command.Capacity,
+            PricePerHour = command.PricePerHour,
+        };
+
+        _context.Add(newParking);
+        var result = await _context.SaveChangesAsync(cancellationToken) > 0;
+
+        if (result)
+            return Result<Guid>.Success(newParking.ParkingId, "Parking registered successfully");
+        return Result<Guid>.Failure("Failed to register parking");
+    }
+
+    public async Task<Result<bool>> DeleteParkingAsync(Guid parkingId, CancellationToken cancellationToken)
+    {
+        var result = await _context.Parkings.Where(p => p.ParkingId == parkingId).ExecuteDeleteAsync(cancellationToken) > 0;
+
+        if (result)
+            return Result<bool>.Success(true, "Parking deleted successfully");
+        return Result<bool>.Failure("Failed to delete p");
+    }
+
+    public async Task<Result<ParkingDto>> UpdateParkingAsync(UpdateParkingCommand command, CancellationToken cancellationToken)
+    {
+        var parking = await _context.Parkings.FindAsync(command.Id);
+
+        if (parking == null)
+            return Result<ParkingDto>.Failure("Parking not found, failed to update.");
+
+        parking.Name = command.Name;
+        parking.Address = command.Address;
+        parking.Capacity = command.Capacity;
+        parking.PricePerHour = command.PricePerHour;
+        parking.Status = command.Status;
+
+        var result = await _context.SaveChangesAsync(cancellationToken) > 0;
+
+        if (result)
+        {
+            return Result<ParkingDto>.Success(
+                new ParkingDto(
+                    parking.ParkingId,
+                    parking.Name,
+                    parking.Address,
+                    parking.Capacity,
+                    parking.PricePerHour,
+                    parking.Status),
+                "Parking updated successfully");
         }
 
-        public async Task<Result<List<ParkingDto>>> GetParkingListAsync()
-        {
-            var result = await context.Parkings
-                .Select(p => new ParkingDto
-                {
-                    ParkingId = p.ParkingId,
-                    Name = p.Name,
-                    Address = p.Address,
-                    Capacity = p.Capacity,
-                    PricePerHour = p.PricePerHour,
-                    Status = p.Status,
-                }).
-                ToListAsync();
-
-            if (result == null)
-                return Result<List<ParkingDto>>.Failure("Parkings not retrieved.");
-            return Result<List<ParkingDto>>.Success(result, "Parkings retrieved succeffully");
-        }
-
-        public async Task<Result<ParkingDto>> GetParkingAsync(Guid ParkingId)
-        {
-            var result = await context.Parkings
-                .Where(p => p.ParkingId == ParkingId)
-                .Select(p => new ParkingDto
-                {
-                    ParkingId = p.ParkingId,
-                    Name = p.Name,
-                    Address = p.Address,
-                    Capacity = p.Capacity,
-                    PricePerHour = p.PricePerHour,
-                    Status = p.Status
-                })
-                .FirstOrDefaultAsync();
-
-            if (result == null)
-                return Result<ParkingDto>.Failure("Parking not retrieved.");
-            return Result<ParkingDto>.Success(result, "Parking retrieved succeffully");
-        }
-
-        public async Task<Result<Guid>> RegisterParkingAsync(RegisterParkingDto parking)
-        {
-
-            var newParking = new Parking
-            {
-                ParkingId = Guid.NewGuid(),
-                Name = parking.Name,
-                Address = parking.Address,
-                Capacity = parking.Capacity,
-                PricePerHour = parking.PricePerHour
-            };
-
-            context.Add(newParking);
-            var result = await context.SaveChangesAsync() > 0;
-
-            if (result)
-                return Result<Guid>.Success(newParking.ParkingId, "Parkign registered successfully");
-            return Result<Guid>.Failure("Failed to register p");
-        }
-
-        public async Task<Result<string>> DeleteParkingAsync(Guid parkingId)
-        {
-            var result = await context.Parkings.Where(p => p.ParkingId == parkingId).ExecuteDeleteAsync() > 0;
-
-            if (result)
-                return Result<string>.Success("Deleted", "Parking deleted successfully");
-            return Result<string>.Failure("Failed to delete p");
-        }
-
-        public async Task<Result<ParkingDto>> UpdateParkingAsync(UpdateParkingDto updateParking)
-        {
-            var parking = await context.Parkings.FindAsync(updateParking.ParkingId);
-
-            if (parking == null)
-                return Result<ParkingDto>.Failure("Failed to delete p");
-
-            parking.Name = updateParking.Name;
-            parking.Address = updateParking.Address;
-            parking.Capacity = updateParking.Capacity;
-            parking.PricePerHour = updateParking.PricePerHour;
-            parking.Status = updateParking.Status;
-
-            var result = await context.SaveChangesAsync() > 0;
-
-            if (result)
-            {
-                var updatedParking = new ParkingDto
-                {
-                    ParkingId = parking.ParkingId,
-                    Name = parking.Name,
-                    Capacity = parking.Capacity,
-                    PricePerHour = parking.PricePerHour,
-                    Status = parking.Status,
-                };
-                return Result<ParkingDto>.Success(updatedParking, "Parking updated successfully");
-            }    
-            return Result<ParkingDto>.Failure("Failed to update parking");           
-        }
+        return Result<ParkingDto>.Failure("Failed to update parking");
     }
 }

@@ -48,3 +48,6 @@ npm-debug.log
 
 ## Ignore the .NET Core SDK folder
 .vsconfig/
+
+packages-microsoft-prod*
+

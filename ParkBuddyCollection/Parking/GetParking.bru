@@ -1,0 +1,19 @@
+meta {
+  name: GetParking
+  type: http
+  seq: 2
+}
+
+get {
+  url: http://localhost:5204/api/Parkings/:parkingId
+  body: json
+  auth: inherit
+}
+
+params:path {
+  parkingId: a1f4b29a-8b2e-4a89-a67e-1c4f85b62b29
+}
+
+headers {
+  Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIyZjAzMDE3OC1lNGI3LTRlMDUtYWY1Ni1iYWQ3NWQ1Y2I5ZGUiLCJ1bmlxdWVfbmFtZSI6ImZpbGlwcG9zLnNlcnJpc0BleGFtcGxlLmNvbSIsImVtYWlsIjoiZmlsaXBwb3Muc2VycmlzQGV4YW1wbGUuY29tIiwiaHR0cDovL3NjaGVtYXMubWljcm9zb2Z0LmNvbS93cy8yMDA4LzA2L2lkZW50aXR5L2NsYWltcy9yb2xlIjoiQ3VzdG9tZXIiLCJleHAiOjE3NjAzNjgxNDAsImlzcyI6Ik15QXBpIiwiYXVkIjoiTXlBcGlVc2VycyJ9.ofOfrTmJGef2Hy5hr1kAzTQ9T7fu4q-JDf95_llMK3I
+}

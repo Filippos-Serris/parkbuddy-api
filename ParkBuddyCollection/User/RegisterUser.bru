@@ -1,0 +1,26 @@
+meta {
+  name: RegisterUser
+  type: http
+  seq: 3
+}
+
+post {
+  url: http://localhost:5204/api/User
+  body: json
+  auth: inherit
+}
+
+body:json {
+  {
+    "firstName": "test",
+    "lastName": "test",
+    "email": "test@example.com",
+    "password": "Pa$$w0rd",
+    "role": "Admin"
+  }
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}
